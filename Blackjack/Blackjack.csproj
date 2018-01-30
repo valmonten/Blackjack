@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleInputProvider.cs" />
+    <Compile Include="ConsoleOutputProvider.cs" />
+    <Compile Include="ConsoleTableRenderer.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -50,8 +53,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Interfaces\Blackjack.Interfaces.csproj">
-      <Project>{58f28d2e-966a-470e-85e0-e2b8d249f63a}</Project>
+    <ProjectReference Include="..\Blackjack.Interfaces\Blackjack.Interfaces.csproj">
+      <Project>{8c730059-3ba9-4bd0-8bff-47f83980c027}</Project>
       <Name>Blackjack.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
