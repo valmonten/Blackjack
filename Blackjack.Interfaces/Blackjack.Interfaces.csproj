@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IChoiceProvider.cs" />
+    <Compile Include="IDeck.cs" />
     <Compile Include="IGameManager.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IOutputProvider.cs" />
