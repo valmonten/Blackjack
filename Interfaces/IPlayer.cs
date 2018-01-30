@@ -5,10 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Interfaces
+namespace Blackjack.Interfaces
 {
-    public class IPlayer
+    public interface IPlayer
     {
-        
+        string Name { get; set; }
+        ICard[] Hand { get; set; }
+
+        // Hit me method
+
+        //Stay method
+
+        //
+
+
+
     }
 }
