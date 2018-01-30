@@ -18,6 +18,14 @@ namespace Blackjack
 
         // Draw card method
 
+        public Card DrawACard()
+        {
+            Card cardToReturn = cards[cards.Count - 1];
+            cards.RemoveAt(cards.Count - 1);
+            return cardToReturn;
+        }
+
         // Remaining cards method
+
     }
 }
