@@ -11,16 +11,16 @@ namespace Blackjack.Tests
         public void TestCardConstructor()
         {
             // Arrange
-            Suit testSuit = 0;
-            Face testFace = 0;
+            Suit testSuit = Suit.Heart;
+            Face testFace = Face.Ace;
             int testValue = 1;
 
             // Act
             Card actual = new Card(testSuit, testFace, testValue);
 
             // Assert
-            Assert.AreEqual("Heart", actual.Suit);
-            Assert.AreEqual("Ace", actual.Face);
+            Assert.AreEqual(Suit.Heart, actual.Suit);
+            Assert.AreEqual(Face.Ace, actual.Face);
             Assert.AreEqual(1, actual.Value);
         }
     }
