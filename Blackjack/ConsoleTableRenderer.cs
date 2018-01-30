@@ -9,11 +9,11 @@ namespace Blackjack
 {
     public class ConsoleTableRenderer : ITableRenderer
     {
-        public void Render()
+        public void Render() : 
         { }
         public void Render(ITable table)
         {
-            throw new NotImplementedException();
+            Console.Write("Dealer's Cards: ");
         }
     }
 }
