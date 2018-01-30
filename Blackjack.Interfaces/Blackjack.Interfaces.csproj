@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IInputProvider.cs" />
+    <Compile Include="IOutputProvider.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="ITable.cs" />
+    <Compile Include="ITableRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
