@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
+    /// <summary>
+    /// Receive input from the user via the console
+    /// </summary>
     public class ConsoleInputProvider : Blackjack.Interfaces.IInputProvider
     {
+        public void Read()
+        {
+            Console.ReadLine();
+        }
     }
 }
