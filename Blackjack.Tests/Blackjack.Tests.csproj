@@ -50,12 +50,17 @@
   <ItemGroup>
     <Compile Include="DeckTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CardTests.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blackjack.Interfaces\Blackjack.Interfaces.csproj">
+      <Project>{8C730059-3BA9-4BD0-8BFF-47F83980C027}</Project>
+      <Name>Blackjack.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Blackjack\Blackjack.csproj">
       <Project>{d1c045c1-7e54-4d3e-b1d3-30ad903e4855}</Project>
       <Name>Blackjack</Name>
