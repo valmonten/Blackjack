@@ -9,10 +9,11 @@ namespace Blackjack
 {
     public class ConsoleTableRenderer : Blackjack.Interfaces.ITableRenderer
     {
-        public ITable Table { get; set; }
-        public ConsoleTableRenderer(ITable table)
+        public void Render()
+        { }
+        public void Render(ITable table)
         {
-            Table = table;
+            throw new NotImplementedException();
         }
     }
 }
