@@ -12,5 +12,6 @@ namespace Blackjack.Interfaces
     /// </summary>
     public interface IOutputProvider
     {
+        void Print(string op);
     }
 }
