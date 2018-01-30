@@ -8,5 +8,6 @@ namespace Blackjack
 {
     class ConsoleInputProvider
     {
+
     }
 }
