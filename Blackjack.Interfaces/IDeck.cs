@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interfaces
+namespace Blackjack.Interfaces
 {
-    public interface IDeck
+    interface IDeck
     {
         /// <summary>
         /// Builds new deck of cards.
