@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
-    public enum Suit
+    public enum CardSuit
     {
         Heart,
         Diamond,
@@ -14,7 +14,7 @@ namespace Blackjack.Interfaces
         Club
     }
 
-    public enum Face
+    public enum CardFace
     {
         Ace,
         Two,
@@ -33,8 +33,8 @@ namespace Blackjack.Interfaces
 
     public interface ICard
     {
-        Suit Suit { get; set; }
-        Face Face { get; set; }
+        CardSuit Suit { get; set; }
+        CardFace Face { get; set; }
         int Value { get; set; }
     }
 }
