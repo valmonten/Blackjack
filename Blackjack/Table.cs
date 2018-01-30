@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    public class ConsoleTableRenderer : Blackjack.Interfaces.ITableRenderer
+    public class Table : Blackjack.Interfaces.ITable
     {
     }
 }

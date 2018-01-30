@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class ConsoleOutputProvider
+    public class ConsoleOutputProvider : Blackjack.Interfaces.IOutputProvider
     {
     }
 }
