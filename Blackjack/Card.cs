@@ -10,8 +10,8 @@ namespace Blackjack
     public class Card : ICard
     {
         // Properties each card will have.
-        public Suit Suit { get; set; }
-        public Face Face { get; set; }
+        public CardSuit Suit { get; set; }
+        public CardFace Face { get; set; }
         public int Value { get; set; }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Blackjack
         /// <param name="suit">The suit of the card.</param>
         /// <param name="face">The face of the card.</param>
         /// <param name="value">The value of the card based on its face.</param>
-        public Card(Suit suit, Face face, int value)
+        public Card(CardSuit suit, CardFace face, int value)
         {
             this.Suit = suit;
             this.Face = face;
