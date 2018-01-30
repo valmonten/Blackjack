@@ -26,7 +26,7 @@ namespace Blackjack
         //helper function to show a player's hand.
         public void ShowHand(IPlayer player)
         {
-            //loop through a player's hand 
+            //loop through a player's hand and print their cards
             Console.Write("player's hand");
         }
     }
