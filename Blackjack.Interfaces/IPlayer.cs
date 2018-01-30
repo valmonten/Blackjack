@@ -13,13 +13,13 @@ namespace Blackjack.Interfaces
         string Name { get; set; }
 
         // The cards the player has
-        ICard[] Hand { get; set; }
+        List<ICard> Hand { get; set; }
 
         // Hit me asks dealer for another card that gets added to Hand
-        ICard HitMe();
+        ICard GetCard(IDealer dealer);
 
         // Player takes no more cards
-        void Stay();
+        //void Stay();
 
     }
 }
