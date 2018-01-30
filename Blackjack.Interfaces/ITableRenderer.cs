@@ -12,6 +12,6 @@ namespace Blackjack.Interfaces
     /// </summary>
     public interface ITableRenderer
     {
-        ITable Table { get; set; }
+        void Render(ITable table);
     }
 }

@@ -13,6 +13,7 @@ namespace Blackjack.Interfaces
     /// </summary>
     public interface ITable
     {
-        List<IPlayer> players { get; set; }
+        IPlayer Dealer { get; set; }
+        List<IPlayer> Players { get; set; }
     }
 }
