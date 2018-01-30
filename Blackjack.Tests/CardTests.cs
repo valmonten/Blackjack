@@ -19,9 +19,9 @@ namespace Blackjack.Tests
             Card actual = new Card(testSuit, testFace, testValue);
 
             // Assert
-            Assert.AreEqual(Suit.Heart, actual.Suit);
-            Assert.AreEqual(Face.Ace, actual.Face);
-            Assert.AreEqual(1, actual.Value);
+            Assert.AreEqual(testSuit, actual.Suit);
+            Assert.AreEqual(testFace, actual.Face);
+            Assert.AreEqual(testValue, actual.Value);
         }
     }
 }
