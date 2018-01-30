@@ -11,8 +11,8 @@ namespace Blackjack.Tests
         public void TestCardConstructor()
         {
             // Arrange
-            Suit testSuit = Suit.Heart;
-            Face testFace = Face.Ace;
+            CardSuit testSuit = CardSuit.Heart;
+            CardFace testFace = CardFace.Ace;
             int testValue = 1;
 
             // Act
