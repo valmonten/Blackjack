@@ -3,40 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Blackjack.Interfaces;
 
 namespace Blackjack
-{
-    public enum Suit
+{ 
+    public class Card : ICard
     {
-        Heart,
-        Diamond,
-        Spade,
-        Club
-    }
-
-    public enum Face
-    {
-        Ace,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Ten,
-        Jack,
-        Queen,
-        King
-    }
-
-    public class Card
-    {
-        // Fields a card will have.
-        private Suit suit;
-        private Face face;
-        private int value;
+        // Properties each card will have.
+        public Suit Suit { get; set; }
+        public Face Face { get; set; }
+        public int Value { get; set; }
 
         /// <summary>
         /// This method creates one card with a suit, face, value based on the arguments passed.
@@ -46,9 +22,9 @@ namespace Blackjack
         /// <param name="value">The value of the card.</param>
         public void CreateCard(Suit suit, Face face, int value)
         {
-            this.suit = suit;
-            this.face = face;
-            this.value = value;
+            this.Suit = suit;
+            this.Face = face;
+            this.Value = value;
         }
     }
 }
