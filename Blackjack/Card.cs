@@ -19,12 +19,13 @@ namespace Blackjack
         /// </summary>
         /// <param name="suit">The suit of the card.</param>
         /// <param name="face">The face of the card.</param>
-        /// <param name="value">The value of the card.</param>
-        public void CreateCard(Suit suit, Face face, int value)
+        /// <param name="value">The value of the card based on its face.</param>
+        public Card(Suit suit, Face face, int value)
         {
             this.Suit = suit;
             this.Face = face;
             this.Value = value;
         }
+
     }
 }

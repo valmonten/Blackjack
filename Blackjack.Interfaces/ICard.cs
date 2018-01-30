@@ -36,10 +36,5 @@ namespace Blackjack.Interfaces
         Suit Suit { get; set; }
         Face Face { get; set; }
         int Value { get; set; }
-
-        /// <summary>
-        /// Function to create a card.
-        /// </summary>
-        void CreateCard(Suit suit, Face face, int value);
     }
 }
