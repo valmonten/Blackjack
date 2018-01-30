@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Blackjack
 {
     /// <summary>
-    /// Receive input from the user via the console
+    /// Returns input from the user via the console
     /// </summary>
     public class ConsoleInputProvider : Blackjack.Interfaces.IInputProvider
     {
-        public void Read()
+        public string Read()
         {
-            Console.ReadLine();
+            return Console.ReadLine();
         }
     }
 }
