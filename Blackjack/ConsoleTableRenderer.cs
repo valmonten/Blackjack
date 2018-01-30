@@ -7,7 +7,7 @@ using Blackjack.Interfaces;
 
 namespace Blackjack
 {
-    public class ConsoleTableRenderer : Blackjack.Interfaces.ITableRenderer
+    public class ConsoleTableRenderer : ITableRenderer
     {
         public void Render()
         { }

@@ -7,7 +7,7 @@ using Blackjack.Interfaces;
 
 namespace Blackjack
 {
-    public class Table : Blackjack.Interfaces.ITable
+    public class Table : ITable
     {
         public IPlayer Dealer { get; set; }
         public List<IPlayer> Players { get; set; }
