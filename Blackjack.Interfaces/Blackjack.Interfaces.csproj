@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58F28D2E-966A-470E-85E0-E2B8D249F63A}</ProjectGuid>
+    <ProjectGuid>{8C730059-3BA9-4BD0-8BFF-47F83980C027}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Blackjack.Interfaces</RootNamespace>
@@ -40,8 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IGameManager.cs" />
-    <Compile Include="Interface1.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
