@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
-    public enum Choice
-    {
-        Hit,
-        Stay
-    }
     interface IChoiceProvider
     {
         void DirectHitChoice(IPlayer gambler, IPlayer dealer, Choice choice);
