@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IChoiceProvider.cs" />
+    <Compile Include="IGameManager.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IOutputProvider.cs" />
     <Compile Include="ICard.cs" />
