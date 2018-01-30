@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IGameManager.cs" />
     <Compile Include="Interface1.cs" />
+    <Compile Include="IDeck.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

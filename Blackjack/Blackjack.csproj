@@ -45,6 +45,8 @@
     <Compile Include="ConsoleInputProvider.cs" />
     <Compile Include="ConsoleOutputProvider.cs" />
     <Compile Include="ConsoleTableRenderer.cs" />
+    <Compile Include="Deck.cs" />
+    <Compile Include="Card.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Table.cs" />
