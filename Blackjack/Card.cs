@@ -15,7 +15,7 @@ namespace Blackjack
         public int Value { get; set; }
 
         /// <summary>
-        /// This method creates one card with a suit, face, value based on the arguments passed.
+        /// This constructor creates one card with a suit, face, value based on the arguments passed.
         /// </summary>
         /// <param name="suit">The suit of the card.</param>
         /// <param name="face">The face of the card.</param>
