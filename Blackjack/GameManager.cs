@@ -11,13 +11,18 @@ namespace Blackjack
     {
         public GameState GameState { get; private set; }
 
-        public IDeck Deck => throw new NotImplementedException();
+        public IDeck Deck { get; private set;}
 
-        public ITable Table => throw new NotImplementedException();
+        public ITable Table { get; private set; }
 
-        public List<IPlayer> Gambler => throw new NotImplementedException();
+        public List<IGambler> Gamblers { get; private set; }
 
-        public IPlayer Dealer => throw new NotImplementedException();
+        public IDealer Dealer { get; private set; }
+
+        public IInputProvider InputProvider { get; private set; }
+        public IOutputProvider OutputProvider { get; private set; }
+        public ITableRenderer TableRenderer { get; private set; }
+
 
         public void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer)
         {
@@ -26,6 +31,10 @@ namespace Blackjack
 
         public void PerformSingleTurn()
         {
+            // If gambler, prompt for action
+            // Once action is received, parse action and execute accordingly
+            // If necessary, prompt for action again
+            // If player stays or busts, end turn and update game state
             throw new NotImplementedException();
         }
 
@@ -41,7 +50,22 @@ namespace Blackjack
 
         public void StartGame()
         {
-            // Instantiate player and ask for name, instantiate dealer and table and deck
+            // Instantiate player and ask for name, instantiate dealer and table and deck and I/O
+            GameState = GameState.WaitingToStart;
+            Deck = new Deck();
+            Gambler player1 = new Gambler();
+            Gamblers = new List<IGambler> { player1 };
+            Dealer = new Dealer();
+            InputProvider = new ConsoleInputProvider();
+            OutputProvider = new ConsoleOutputProvider();
+            TableRenderer = new ConsoleTableRenderer();
+
+            Console.WriteLine("Please enter your name, gambler");
+            string gamblerName = InputProvider.Read();
+            player1.Name = gamblerName;
+
+
+
             // Deal cards to player and dealer (2 each)
             // Render table
             // Initiate turns

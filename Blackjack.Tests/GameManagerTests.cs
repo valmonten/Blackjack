@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Blackjack.Tests
 {
@@ -7,8 +8,12 @@ namespace Blackjack.Tests
     public class GameManagerTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestStartGameInstantiatesPlayerAndSetsName()
         {
+            // Arrange
+            Gambler testGambler = new Gambler();
+            
+
         }
     }
 }
