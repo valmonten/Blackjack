@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
-    enum GameState
+    public enum GameState
     {
         WaitingToStart,
         Started,
@@ -16,7 +16,7 @@ namespace Blackjack.Interfaces
         Draw,
         Winner
     }
-    interface IGameManager
+    public interface IGameManager
     {
         GameState GameState { get; }
         IDeck Deck { get;  }
