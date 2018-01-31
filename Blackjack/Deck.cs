@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Blackjack.Interfaces;
 
+
 namespace Blackjack
 {
-    public class Deck
+    public class Deck : IDeck
     {
         private List<Card> cards;
 
@@ -48,8 +49,7 @@ namespace Blackjack
         // Reset Method
 
         // Draw card method
-
-        public Card DrawACard()
+        public ICard DrawCard()
         {
             Card cardToReturn = cards[cards.Count - 1];
             cards.RemoveAt(cards.Count - 1);
@@ -57,6 +57,24 @@ namespace Blackjack
         }
 
         // Remaining cards method
+        public int RemainingCardsInDeck()
+        {
+            return cards.Count;
+        }
 
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Shuffle()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDeck.RemainingCardsInDeck()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
