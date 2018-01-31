@@ -12,6 +12,15 @@ namespace Blackjack
         public IDeck Deck { get; set; }
         public string Name { get; set; }
         public List<ICard> Hand { get; set; }
+        public Dealer(IDeck deck, string name)
+        {
+            Deck = deck;
+            Name = name;
+        }
+        public Dealer (string name) : this(new Deck(), name)
+        {
+
+        }
 
         public ICard Deal()
         {
