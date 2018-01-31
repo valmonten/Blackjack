@@ -13,14 +13,16 @@ namespace Blackjack
         public string Name { get; set; }
         public List<ICard> Hand { get; set; }
 
-        public ICard Deal(IDeck Deck)
+        public ICard Deal()
         {
-            throw new NotImplementedException();
+            return Deck.DrawCard();
         }
 
         public ICard GetCard(IDealer dealer)
         {
-            throw new NotImplementedException();
+            ICard card = dealer.Deal();
+            this.Hand.Add(card);
+            return card;
         }
     }
 }
