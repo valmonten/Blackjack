@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
-    interface IDeck
+    public interface IDeck
     {
         /// <summary>
         /// Builds new deck of cards.
@@ -22,5 +22,16 @@ namespace Blackjack.Interfaces
         /// Clear the deck completely.
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Draw a card from the deck.
+        /// </summary>
+        void DrawCard();
+
+        /// <summary>
+        /// Remaining number of cards in the deck.
+        /// </summary>
+        void RemainingCardsInDeck();
+
     }
 }

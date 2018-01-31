@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDealer.cs" />
+    <Compile Include="IGambler.cs" />
     <Compile Include="IChoiceProvider.cs" />
     <Compile Include="IDeck.cs" />
     <Compile Include="IGameManager.cs" />
