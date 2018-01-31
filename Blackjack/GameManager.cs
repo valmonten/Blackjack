@@ -38,28 +38,28 @@ namespace Blackjack
             while (isUserInputIncorrect)
             {
                 // Ask user if they want to play again.
-                ConsoleOutputProvider.Print("Would you like to play another game of Blackjack? (y/n)");
-                var playerResponse = ConsoleInputProvider.Read();
+                OutputProvider.Print("Would you like to play another game of Blackjack? (y/n)");
+                var playerResponse = InputProvider.Read();
 
                 // If user replies "y", then clear the console and reload a new game.
                 if (playerResponse == "y")
                 {
                     isUserInputIncorrect = false;
-                    ConsoleOutputProvider.Clear();
+                    OutputProvider.Clear();
                     Program.NewGame();
                 }
                 // If user replies "n", exit the console after a key press.
                 else if (playerResponse == "n")
                 {
                     isUserInputIncorrect = false;
-                    ConsoleOutputProvider.Print("Okay, goodbye! (Press any key to exit)");
-                    ConsoleInputProvider.Read();
+                    OutputProvider.Print("Okay, goodbye! (Press any key to exit)");
+                    InputProvider.Read();
                 }
                 // If user inputs another response, ask the user for a correct input.
                 else
                 {
                     isUserInputIncorrect = true;
-                    ConsoleOutputProvider.Print("Sorry, could you repeat that?");
+                    OutputProvider.Print("Sorry, could you repeat that?");
                     continue;
                 }
             }
@@ -70,10 +70,10 @@ namespace Blackjack
         /// </summary>
         public void ResetScreen()
         {
-            ConsoleOutputProvider.Clear();
-            ConsoleOutputProvider.Print();
+            OutputProvider.Clear();
+            OutputProvider.Print();
             // Draw the table.
-            ConsoleOutputProvider.Print();
+            OutputProvider.Print();
         }
 
         /// <summary>
