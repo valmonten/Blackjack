@@ -13,5 +13,11 @@ namespace Blackjack.Tests
             Assert.AreEqual("test", gambler.Name);
             Assert.AreEqual(0, gambler.Hand.Count);
         }
+
+        public void TestGetCard()
+        {
+            Dealer dealer = new Dealer();
+            Card card = dealer.Deal();
+        }
     }
 }

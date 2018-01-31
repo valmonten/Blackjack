@@ -7,7 +7,7 @@ using Blackjack.Interfaces;
 
 namespace Blackjack
 {
-    public class Gambler : IGambler
+    public class Gambler : IGambler, IPlayer
     {
         public double Money { get; set; }
         public string Name { get; set; }
