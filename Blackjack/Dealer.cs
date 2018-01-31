@@ -13,7 +13,7 @@ namespace Blackjack
         public string Name { get; set; }
         public List<ICard> Hand { get; set; }
 
-        public ICard Deal()
+        public ICard Deal(IDeck Deck)
         {
             throw new NotImplementedException();
         }
