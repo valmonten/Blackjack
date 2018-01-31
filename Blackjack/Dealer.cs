@@ -54,5 +54,11 @@ namespace Blackjack
             this.Hand.Add(card);
             return card;
         }
+
+        //Clears the hand of the player
+        public void ClearHand()
+        {
+            Hand = new List<ICard>();
+        }
     }
 }
