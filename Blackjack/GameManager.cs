@@ -29,16 +29,56 @@ namespace Blackjack
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Helper function to ask user if they want to play the game again.
+        /// </summary>
         public void PlayAgain()
         {
-            throw new NotImplementedException();
+            var isUserInputIncorrect = true;
+            while (isUserInputIncorrect)
+            {
+                // Ask user if they want to play again.
+                OutputProvider.Print("Would you like to play another game of Blackjack? (y/n)");
+                var playerResponse = InputProvider.Read();
+
+                // If user replies "y", then clear the console and reload a new game.
+                if (playerResponse == "y")
+                {
+                    isUserInputIncorrect = false;
+                    OutputProvider.Clear();
+                    Program.NewGame();
+                }
+                // If user replies "n", exit the console after a key press.
+                else if (playerResponse == "n")
+                {
+                    isUserInputIncorrect = false;
+                    OutputProvider.Print("Okay, goodbye! (Press any key to exit)");
+                    InputProvider.Read();
+                }
+                // If user inputs another response, ask the user for a correct input.
+                else
+                {
+                    isUserInputIncorrect = true;
+                    OutputProvider.Print("Sorry, could you repeat that?");
+                    continue;
+                }
+            }
         }
 
+        /// <summary>
+        /// Helper function to clear the screen, and redraw the table.
+        /// </summary>
         public void ResetScreen()
         {
-            throw new NotImplementedException();
+            OutputProvider.Clear();
+            OutputProvider.Print();
+            // Draw the table.
+            OutputProvider.Print();
         }
 
+        /// <summary>
+        /// Starts the new game.
+        /// </summary>
         public void StartGame()
         {
             // Instantiate player and ask for name, instantiate dealer and table and deck
