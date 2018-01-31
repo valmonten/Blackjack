@@ -23,7 +23,30 @@ namespace Blackjack
         public IOutputProvider OutputProvider { get; private set; }
         public ITableRenderer TableRenderer { get; private set; }
 
+        /// <summary>
+        /// Instantiates GameManager Class, inheirits overloaded constructor for dependency injection
+        /// </summary>
+        public GameManager() : this(new Deck(), new Dealer(), new ConsoleInputProvider(),
+            new ConsoleOutputProvider(),
+            new ConsoleTableRenderer())
+        {
 
+        }
+
+        /// <summary>
+        /// Overloaded constructor for dependency injection
+        /// </summary>
+        /// <param name="deck"></param>
+        /// <param name="dealer"></param>
+        /// <param name="inputProvider"></param>
+        /// <param name="outputProvider"></param>
+        /// <param name="tableRenderer"></param>
+        public GameManager(IDeck deck, IDealer dealer,
+            IInputProvider inputProvider, IOutputProvider outputProvider,
+            ITableRenderer tableRenderer)
+        {
+            
+        }
         public void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer)
         {
             throw new NotImplementedException();
