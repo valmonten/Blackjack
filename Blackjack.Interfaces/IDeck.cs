@@ -26,7 +26,7 @@ namespace Blackjack.Interfaces
         /// <summary>
         /// Draw a card from the deck.
         /// </summary>
-        void DrawCard();
+        ICard DrawCard();
 
         /// <summary>
         /// Remaining number of cards in the deck.
