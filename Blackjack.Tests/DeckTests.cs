@@ -14,7 +14,14 @@ namespace Blackjack.Tests
         //[TestMethod]
         //public void TestShuffle()
         //{
-        //}
+            // arrange
+
+
+            // act
+
+
+            // assert
+        }
 
         //[TestMethod]
         //public void TestReset()
@@ -25,7 +32,7 @@ namespace Blackjack.Tests
         //public void TestDrawCard()
         //{
         //}
-    
+
         //[TestMethod]
         //public void TestGetCardCount()
         //{
