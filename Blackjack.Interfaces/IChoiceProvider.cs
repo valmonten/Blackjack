@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
-    interface Interface1
+    interface IChoiceProvider
     {
+        void DirectHitChoice(IPlayer gambler, IPlayer dealer, Choice choice);
     }
 }

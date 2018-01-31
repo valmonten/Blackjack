@@ -20,5 +20,15 @@ namespace Blackjack.Tests
         //public void TestReset()
         //{
         //}
+
+        //[TestMethod]
+        //public void TestDrawCard()
+        //{
+        //}
+    
+        //[TestMethod]
+        //public void TestGetCardCount()
+        //{
+        //}
     }
 }
