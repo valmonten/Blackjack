@@ -8,10 +8,16 @@ namespace Blackjack
 {
     public class Deck
     {
+        private List<Card> cards;
+
         // Build Method(s)
 
         // Shuffle Method
 
         // Reset Method
+
+        // Draw card method
+
+        // Remaining cards method
     }
 }
