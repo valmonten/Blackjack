@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Blackjack.Interfaces
 {
+    // The Dealer interface
     public interface IDealer : IPlayer
     {
-        // ICard Deal(IPlayer player);
+        // Returns a card that can be added to a hand
         ICard Deal();
+        // The deck a dealer will be dealing from
         IDeck Deck { get; set; }
         
     }
