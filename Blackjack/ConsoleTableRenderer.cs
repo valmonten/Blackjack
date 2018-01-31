@@ -7,6 +7,9 @@ using Blackjack.Interfaces;
 
 namespace Blackjack
 {
+    /// <summary>
+    /// Render the table to the console
+    /// </summary>
     public class ConsoleTableRenderer : ITableRenderer
     {
         /// <summary>
@@ -29,10 +32,19 @@ namespace Blackjack
         /// <param name="table"></param>
         public void ShowAllHands(ITable table)
         {
-            Console.Write("Dealer's Hand: ");
+            if (table == null)
+                throw new ArgumentNullException("Table cannot be null");
+            //Clear previous table view
+            Console.Clear();
+            //Show dealer cards
+            Console.Write("Dealer: ");
             ShowHand(table.Dealer);
             //loop through a player's hand and print their cards
-            Console.Write("player's hand");
+            foreach(var player in table.Players)
+            {
+                Console.Write($"{0}: ", player.Name);
+                ShowHand(player);
+            }
         }
 
         /// <summary>
@@ -41,7 +53,14 @@ namespace Blackjack
         /// <param name="table">ITable representation of the BlackJack table</param>
         public void ShowPlayersHands(ITable table)
         {
-
+            if (table == null)
+                throw new ArgumentNullException("Table cannot be null");
+            Console.Write("Dealer: ");
+            HideHand(table.Dealer);
+            foreach(var player in table.Players)
+            {
+                ShowHand(player);
+            }
         }
 
         /// <summary>
@@ -50,7 +69,13 @@ namespace Blackjack
         /// <param name="player">The IPlayer in the game</param>
         public void ShowHand(IPlayer player)
         {
-
+            if (player == null)
+                throw new ArgumentNullException("Cannot show cards of null");
+            foreach(var card in player.Hand)
+            {
+                Console.Write($"({0} of {1}) ", card.Face, card.Suit);
+            }
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -59,7 +84,16 @@ namespace Blackjack
         /// <param name="dealer">The IDealer for the game</param>
         public void HideHand(IDealer dealer)
         {
-
+            if (dealer == null)
+                throw new ArgumentNullException("Cannot hide a card for null");
+            if(dealer.Hand.Count > 2)
+                throw new Exception("Dealer has too many cards to hide");
+            if (dealer.Hand.Count == 2)
+            {
+                var card = dealer.Hand.FirstOrDefault();
+                Console.Write("( " + card.Face + " of " + card.Suit + ") ");
+                Console.WriteLine();
+            }            
         }
     }
 }
