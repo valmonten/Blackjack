@@ -15,11 +15,11 @@ namespace Blackjack.Interfaces
         // The cards the player has
         List<ICard> Hand { get; set; }
 
-        // Hit me asks dealer for another card that gets added to Hand
+        // Asks dealer for another card that gets added to Hand
         ICard GetCard(IDealer dealer);
 
-        // Player takes no more cards
-        //void Stay();
+        // Makes the hand empty
+        void ClearHand();
 
     }
 }
