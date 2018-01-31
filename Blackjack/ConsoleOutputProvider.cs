@@ -16,5 +16,9 @@ namespace Blackjack
         {
             Console.WriteLine(output);
         }
+        public void Clear()
+        {
+            Console.Clear();
+        }
     }
 }
