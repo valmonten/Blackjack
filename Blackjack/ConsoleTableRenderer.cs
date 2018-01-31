@@ -22,7 +22,8 @@ namespace Blackjack
                 throw new ArgumentNullException("Cannot render null");
             if (table.AreAllHandsComplete)
                 ShowAllHands(table);
-            ShowPlayersHands(table);
+            else
+                ShowPlayersHands(table);
             
         }
 
