@@ -13,7 +13,9 @@ namespace Blackjack.Interfaces
     /// </summary>
     public interface ITable
     {
-        IPlayer Dealer { get; set; }
-        List<IPlayer> Players { get; set; }
+        IDealer Dealer { get; }
+        IEnumerable<IGambler> Players { get; }
+        bool AreAllHandsComplete { get; }
+        void CompleteAllHands();
     }
 }

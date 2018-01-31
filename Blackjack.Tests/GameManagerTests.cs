@@ -4,12 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Blackjack.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class GameManagerTests
     {
         [TestMethod]
         public void TestMethod1()
         {
-            Assert.AreEqual(1, 1);
         }
     }
 }
