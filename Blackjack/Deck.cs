@@ -17,7 +17,6 @@ namespace Blackjack
         // Reset Method
 
         // Draw card method
-
         public Card DrawACard()
         {
             Card cardToReturn = cards[cards.Count - 1];
@@ -26,6 +25,11 @@ namespace Blackjack
         }
 
         // Remaining cards method
+        public int RemainingCardsInDeck()
+        {
+            return cards.Count;
+        }
+
 
     }
 }
