@@ -21,10 +21,17 @@ namespace Blackjack.Interfaces
         GameState GameState { get; }
         IDeck Deck { get;  }
         ITable Table { get; }
-        IPlayer Gambler { get;  }
+        List<IPlayer> Gambler { get;  }
         IPlayer Dealer { get;  }
 
+        void StartGame();
+
+        void PerformSingleTurn();
+        void SwitchTurns();
+        void PlayAgain();
+        void ResetScreen();
         void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer);
+
         
     }
 }
