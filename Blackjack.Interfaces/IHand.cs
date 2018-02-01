@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Blackjack.Interfaces
+{ 
+    public interface IHand
+    {
+        IList<ICard> AllCards { get; set; }
+        int Count { get; }
+        int SumCardsValue();
+    }
+}

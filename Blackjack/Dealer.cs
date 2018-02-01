@@ -14,13 +14,17 @@ namespace Blackjack
         //Name of dealer
         public string Name { get; set; }
         //The cards the dealer has in his hand
-        public List<ICard> Hand { get; set; }
+        //public List<ICard> Hand { get; set; }
+
+        public IHand Hand { get; set; }
+
         /// <summary>
         /// Constructor for deck when a deck is not specified.
         /// </summary>
         /// <param name="name">Name of the dealer</param>
         public Dealer (string name) : this(new Deck(), name)
         {
+            Hand = new Hand();
         }
         /// <summary>
         /// Constructor for deck and name to be passed in
@@ -31,6 +35,7 @@ namespace Blackjack
         {
             Deck = deck;
             Name = name;
+            Hand = new Hand();
         }
 
         /// <summary>
@@ -51,14 +56,14 @@ namespace Blackjack
         public ICard GetCard(IDealer dealer)
         {
             ICard card = dealer.Deal();
-            this.Hand.Add(card);
+            this.Hand.AllCards.Add(card);
             return card;
         }
 
         //Clears the hand of the player
         public void ClearHand()
         {
-            Hand = new List<ICard>();
+            Hand = new Hand();
         }
     }
 }
