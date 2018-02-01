@@ -11,8 +11,6 @@ namespace Blackjack
     {
         public GameState GameState { get; private set; }
 
-        public IDeck Deck { get; private set;}
-
         public ITable Table { get; private set; }
 
         public List<IGambler> Gamblers { get; private set; }
@@ -26,7 +24,7 @@ namespace Blackjack
         /// <summary>
         /// Instantiates GameManager Class, inheirits overloaded constructor for dependency injection
         /// </summary>
-        public GameManager() : this(new Deck(), new Dealer(), new ConsoleInputProvider(),
+        public GameManager() : this(new Deck(), new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
             new ConsoleTableRenderer())
         {
@@ -45,7 +43,10 @@ namespace Blackjack
             IInputProvider inputProvider, IOutputProvider outputProvider,
             ITableRenderer tableRenderer)
         {
-            
+            Dealer = dealer;
+            InputProvider = inputProvider;
+            OutputProvider = outputProvider;
+            TableRenderer = tableRenderer;
         }
         public void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer)
         {
@@ -113,30 +114,39 @@ namespace Blackjack
         /// </summary>
         public void StartGame()
         {
-            // Instantiate player and ask for name, instantiate dealer and table and deck and I/O
-            GameState = GameState.WaitingToStart;
-            Deck = new Deck();
-            Gambler player1 = new Gambler();
-            Gamblers = new List<IGambler> { player1 };
-            Dealer = new Dealer();
-            InputProvider = new ConsoleInputProvider();
-            OutputProvider = new ConsoleOutputProvider();
-            TableRenderer = new ConsoleTableRenderer();
+            // Instantiate player and ask for name and instantiate them
 
-            Console.WriteLine("Please enter your name, gambler");
+            GameState = GameState.WaitingToStart;
+            OutputProvider.Print("Please enter your name, gambler");
             string gamblerName = InputProvider.Read();
-            player1.Name = gamblerName;
+            Gambler gambler = new Gambler();
+            gambler.Name = gamblerName;
 
 
 
             // Deal cards to player and dealer (2 each)
+            for (int i = 0; i < 4; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Dealer.GetCard(Dealer);
+                }
+                else
+                {
+                    gambler.GetCard(Dealer);
+
+                }
+            }
             // Render table
-            // Initiate turns
-            // Perform action(s)
+            TableRenderer.Render(Table);
+            // Initiate 
+            PerformSingleTurn();
             // Switch turns
-            // Check/update game state
+            SwitchTurns();
             // Once all turns are down, determine winner
+            DetermineWinner();
             // Prompt to play again, if yes repeat cycle, if no reset screen
+            PlayAgain();
         }
 
         public void SwitchTurns()
