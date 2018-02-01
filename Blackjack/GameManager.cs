@@ -58,7 +58,7 @@ namespace Blackjack
         public void GamblerPerformsSingleTurn(IGambler gambler)
         {
             // If gambler, prompt for action
-            OutputProvider.Print("Please Select H to hit or S to stay");
+            OutputProvider.WriteLine("Please Select H to hit or S to stay");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
             
@@ -177,12 +177,12 @@ namespace Blackjack
             }
             else
             {
-                PerformSingleTurn(gambler);
+                GamblerPerformsSingleTurn(gambler);
             }
             // Switch turns
-            SwitchTurns();
+            
             // Once all turns are down, determine winner
-            DetermineWinner();
+            
             // Prompt to play again, if yes repeat cycle, if no reset screen
             PlayAgain();
         }
@@ -193,6 +193,11 @@ namespace Blackjack
                 DealerPerformsSingleTurn();
             else
                 GamblerPerformsSingleTurn(player as Gambler);
+        }
+
+        public bool DetermineWinner()
+        {
+            throw new NotImplementedException();
         }
     }
 }
