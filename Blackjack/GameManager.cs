@@ -149,7 +149,7 @@ namespace Blackjack
             GameState = GameState.WaitingToStart;
             OutputProvider.WriteLine("Please enter your name, gambler");
             string gamblerName = InputProvider.Read();
-            Gambler gambler = new Gambler(gamblerName)
+            Gambler gambler = new Gambler(gamblerName);
 
 
 
