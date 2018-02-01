@@ -164,8 +164,7 @@ namespace Blackjack
             GameState = GameState.WaitingToStart;
             OutputProvider.WriteLine("Please enter your name, gambler.");
             string gamblerName = InputProvider.Read();
-            Gambler gambler = new Gambler();
-            gambler.Name = gamblerName;
+            Gambler gambler = new Gambler(gamblerName);
 
             // Deal cards to player and dealer (2 each)
             for (int i = 0; i < 4; i++)
