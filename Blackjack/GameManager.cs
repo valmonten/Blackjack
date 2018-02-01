@@ -93,6 +93,15 @@ namespace Blackjack
 
         public void DealerPerformsSingleTurn()
         {
+            // Calculate dealer's current hand
+
+            // If value of hand is below 17, dealer hits
+
+            // If over 17, the dealer stays
+
+            // Set GameState to CheckingForGameOver and return
+            GameState = GameState.CheckingForGameOver;
+            //return;
             throw new NotImplementedException();
         }
 
@@ -197,16 +206,16 @@ namespace Blackjack
             }
             else
             {
+                // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
+                
+                // Once all turns are done, determine winner
+                DetermineWinner();
+
+                // Ask player(s) if they want to play again
+                PlayAgain();
             }
-
-            // Switch turns
             
-            // Once all turns are done, determine winner
-            DetermineWinner();
-
-            // Ask player(s) if they want to play again
-            PlayAgain();
         }
 
         public void SwitchTurns(IPlayer player)
