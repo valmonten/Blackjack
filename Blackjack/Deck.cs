@@ -28,7 +28,7 @@ namespace Blackjack
             // List of card suits
             var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>().ToList();
 
-            // Array of card faces
+            // List of card faces
             var cardFaces = Enum.GetValues(typeof(CardFace)).Cast<CardFace>().ToList();
 
             // Array of default card values that correspond with Enum of CardFace
@@ -89,7 +89,7 @@ namespace Blackjack
                     deckLeft.Enqueue(cards[i]);
                 }
 
-                // Loops through current deck and adds all cards in the top half into deckRight.
+                // Loops through current deck and adds all cards in the bottom half into deckRight.
                 for (var i = totalNumCards - 1; i >= halfNumCards; i--)
                 {
                     deckRight.Enqueue(cards[i]);
@@ -98,12 +98,11 @@ namespace Blackjack
                 // Removes all cards from deck to prepare for new cards.
                 cards.RemoveRange(0, cards.Count);
 
-                // Generates random number of cards to skip per turn from both the left and right half-decks when shuffling.
+                // Generates random number of cards to add back to the deck per turn from both the left and right half-decks when shuffling.
                 var leftNumCardsToAdd = randNumCardToAdd.Next(1, 4);
                 var rightNumCardsToAdd = randNumCardToAdd.Next(1, 4);
 
                 while (cards.Count < 52)
-                //while (deckLeft.Count > 0 || deckRight.Count > 0)
                 {
                     // if there are too few cards to dequeue in deckLeft
                     if (deckLeft.Count != 0 && leftNumCardsToAdd > deckLeft.Count)
