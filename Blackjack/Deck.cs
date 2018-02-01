@@ -44,10 +44,6 @@ namespace Blackjack
             }
         }
 
-        // Shuffle Method
-
-        // Reset Method
-
         // Draw card method
         public ICard DrawCard()
         {
@@ -67,14 +63,20 @@ namespace Blackjack
             throw new NotImplementedException();
         }
 
-        public void Shuffle()
+        /// <summary>
+        /// Shuffles the cards the specified number of times.
+        /// </summary>
+        /// <param name="numTimes">Number of times deck is to be shuffled.</param>
+        public void Shuffle(int numTimes)
         {
             throw new NotImplementedException();
         }
+
 
         void IDeck.RemainingCardsInDeck()
         {
             throw new NotImplementedException();
         }
+
     }
 }
