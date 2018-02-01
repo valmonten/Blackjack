@@ -82,6 +82,9 @@ namespace Blackjack
             // Build a deck for the dealer
             Dealer.Deck.Build();
 
+            // Shuffle the deck
+            Dealer.Deck.Shuffle(10);
+
             // Deal 2 cards each to gambler and dealer
             for (int i = 0; i < 4; i++)
             {
