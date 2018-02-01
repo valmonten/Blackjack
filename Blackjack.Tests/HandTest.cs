@@ -49,39 +49,51 @@ namespace Blackjack.Tests
             cardAce.Value = (int)CardFace.Ace + 1;
             Assert.AreEqual(1, cardAce.Value);
 
+            var card6 = new MockCard();
+            card6.Face = CardFace.Six;
+            card6.Value = 6;
+            //Assert.AreEqual(8, card8.Value);
+
+            var card7 = new MockCard();
+            card7.Face = CardFace.Seven;
+            card7.Value = 7;
+
             var card8 = new MockCard();
             card8.Face = CardFace.Eight;
-            card8.Value = (int)CardFace.Eight + 1;
-            Assert.AreEqual(8, card8.Value);
+            card8.Value = 8;
 
 
             var cardKing = new MockCard();
             cardKing.Face = CardFace.King;
-            cardKing.Value = (int)CardFace.King + 1;
-            Assert.AreEqual(13, cardKing.Value);
+            cardKing.Value = 10;
+            //Assert.AreEqual(13, cardKing.Value);
 
-            int whenAceIs1Sum = 1 + 8 + 13;
-            int whenAceIs11Sum = 11 + 8;
+            int expectedSumWhenAceIs_11 = 11 + cardKing.Value;
+            int expectedSumWhenAceIs_1 = 1 + card6.Value + card7.Value + card8.Value + cardKing.Value;
 
             // act
+
+            // Add Card King and Ace to the Hand, making the sum to be 21, so that Ace is determined to be 1
             hand.AllCards.Add(cardAce);
-            hand.AllCards.Add(card8);
-            int sum11 = hand.SumCardsValue();
+            hand.AllCards.Add(cardKing);
+            int actualSumWhenAceIs_11 = hand.SumCardsValue();
             int AceValue11 = hand.AllCards
                 .FirstOrDefault(c => c.Face == CardFace.Ace)
                 .Value;
 
-            hand.AllCards.Add(cardKing);
-
-            int sum1 = hand.SumCardsValue();
+            // Add more cards to make the sum greater than 21, so that Ace value is 1
+            hand.AllCards.Add(card6);
+            hand.AllCards.Add(card7);
+            hand.AllCards.Add(card8);
+            int actualSumWhenAceIs_1 = hand.SumCardsValue();
             int AceValue1 = hand.AllCards
                 .FirstOrDefault(c => c.Face == CardFace.Ace)
                 .Value;
 
             // assert
-            Assert.AreEqual(whenAceIs11Sum, sum11);
+            Assert.AreEqual(expectedSumWhenAceIs_11, actualSumWhenAceIs_11);
             Assert.AreEqual(11, AceValue11);
-            Assert.AreEqual(whenAceIs1Sum, sum1);
+            Assert.AreEqual(expectedSumWhenAceIs_1, actualSumWhenAceIs_1);
             Assert.AreEqual(1, AceValue1);
 
         }
