@@ -48,6 +48,7 @@
     <Compile Include="Dealer.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="Hand.cs" />
     <Compile Include="Gambler.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Program.cs" />
