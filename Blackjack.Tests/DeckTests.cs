@@ -54,12 +54,12 @@ namespace Blackjack.Tests
             Deck newDeck = new Deck();
             newDeck.Build();
             int expected1 = 52;
-            //List<Card> expected2 = newDeck.cards;
+            //var expected2 = newDeck;
 
             // act
             newDeck.Shuffle(1);
             int actual1 = newDeck.RemainingCardsInDeck();
-            //List<Card> actual2 = newDeck.cards;
+            //var actual2 = newDeck;
 
 
             // assert

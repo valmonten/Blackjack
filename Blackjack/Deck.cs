@@ -10,7 +10,7 @@ namespace Blackjack
 {
     public class Deck : IDeck
     {
-        public List<Card> cards;
+        private List<Card> cards;
 
         /// <summary>
         /// Creates an empty deck that contains a list of cards.
@@ -74,7 +74,7 @@ namespace Blackjack
             int halfNumCards = totalNumCards / 2;
 
             // Generate random number of cards to skip when riffle shuffling.
-            Random randNumCardToSkip = new Random();
+            Random randNumCardToAdd = new Random();
 
             // Creates two empty half-decks to be shuffled together.
             var deckLeft = new Queue<Card>();
@@ -99,35 +99,38 @@ namespace Blackjack
                 cards.RemoveRange(0, cards.Count);
 
                 // Generates random number of cards to skip per turn from both the left and right half-decks when shuffling.
-                var leftDeckSkip = randNumCardToSkip.Next(1, 4);
-                var rightDeckSkip = randNumCardToSkip.Next(1, 4);
+                var leftNumCardsToAdd = randNumCardToAdd.Next(1, 4);
+                var rightNumCardsToAdd = randNumCardToAdd.Next(1, 4);
 
-                // if there are too few cards to dequeue in deckLeft
-                if (leftDeckSkip > deckLeft.Count)
+                while (cards.Count < 52)
+                //while (deckLeft.Count > 0 || deckRight.Count > 0)
                 {
-                    while (deckLeft.Any())
+                    // if there are too few cards to dequeue in deckLeft
+                    if (deckLeft.Count != 0 && leftNumCardsToAdd > deckLeft.Count)
                     {
-                        var leftCard = deckLeft.Dequeue();
-                        cards.Add(leftCard);
+                        while (deckLeft.Count != 0)
+                        {
+                            var leftCard = deckLeft.Dequeue();
+                            cards.Add(leftCard);
+                        }
+                        leftNumCardsToAdd = 0;
                     }
-                }
 
-                // if there are too few cards to dequeue in deckRight
-                if (rightDeckSkip > deckLeft.Count)
-                {
-                    while (deckRight.Any())
+                    // if there are too few cards to dequeue in deckRight
+                    if (deckRight.Count != 0 && rightNumCardsToAdd > deckRight.Count)
                     {
-                        var rightCard = deckRight.Dequeue();
-                        cards.Add(rightCard);
+                        while (deckRight.Count != 0)
+                        {
+                            var rightCard = deckRight.Dequeue();
+                            cards.Add(rightCard);
+                        }
+                        rightNumCardsToAdd = 0;
                     }
-                }
 
-                while(cards.Count <= 52 && deckLeft.Any() && deckRight.Any())
-                {
                     // Remove cards from leftCardDeck and adds it to the main Deck
-                    if (deckLeft.Count != 0)
+                    if (deckLeft.Count > 0)
                     {
-                        for (var i = 0; i <= leftDeckSkip; i++)
+                        for (var i = 1; i <= leftNumCardsToAdd; i++)
                         {
                             var leftCard = deckLeft.Dequeue();
                             cards.Add(leftCard);
@@ -135,17 +138,15 @@ namespace Blackjack
                     }
 
                     // Remove cards from rightCardDeck and adds it to the main Deck
-                    if (deckRight.Count != 0)
+                    if (deckRight.Count > 0)
                     {
-                        for (var i = 0; i <= rightDeckSkip; i++)
+                        for (var i = 1; i <= rightNumCardsToAdd; i++)
                         {
                             var rightCard = deckRight.Dequeue();
                             cards.Add(rightCard);
                         }
                     }
                 }
-
-
                 numTimes--;
             }
         }
