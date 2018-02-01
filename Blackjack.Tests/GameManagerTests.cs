@@ -11,7 +11,7 @@ namespace Blackjack.Tests
         public void TestStartGameInstantiatesPlayerAndSetsName()
         {
             // Arrange
-            Gambler testGambler = new Gambler();
+           
             
 
         }
