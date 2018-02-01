@@ -89,7 +89,7 @@ namespace Blackjack
 
         public void DealerPerformsSingleTurn()
         {
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -149,8 +149,7 @@ namespace Blackjack
             GameState = GameState.WaitingToStart;
             OutputProvider.WriteLine("Please enter your name, gambler");
             string gamblerName = InputProvider.Read();
-            Gambler gambler = new Gambler();
-            gambler.Name = gamblerName;
+            Gambler gambler = new Gambler(gamblerName);
 
 
 
