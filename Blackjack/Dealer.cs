@@ -19,6 +19,14 @@ namespace Blackjack
         public IHand Hand { get; set; }
 
         /// <summary>
+        /// Dealer constructor for testing dealer methods involving dealer hand
+        /// </summary>
+        /// <param name="hand"></param>
+        public Dealer (IHand hand)
+        {
+            Hand = hand;
+        }
+        /// <summary>
         /// Constructor for deck when a deck is not specified.
         /// </summary>
         /// <param name="name">Name of the dealer</param>
