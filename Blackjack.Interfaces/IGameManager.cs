@@ -29,11 +29,11 @@ namespace Blackjack.Interfaces
 
         void StartGame();
 
-        void PerformSingleTurn();
-        void SwitchTurns();
+        void GamblerPerformsSingleTurn(IGambler gambler);
+        void DealerPerformsSingleTurn();
+        void SwitchTurns(IPlayer player);
         void PlayAgain();
         void ResetScreen();
-        void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer);
 
         
     }
