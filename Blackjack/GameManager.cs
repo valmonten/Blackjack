@@ -168,18 +168,38 @@ namespace Blackjack
             SwitchTurns(Dealer);
         }
 
-        public void DealerPerformsSingleTurn()
+        public void DealerPerformsSingleTurn(IDealer dealer)
         {
-            // Calculate dealer's current hand
+            if (dealer == null)
+            {
+                throw new ArgumentNullException("Dealer cannot be null!");
+            }
 
-            // If value of hand is below 17, dealer hits
+            // Calculate dealer's current hand
+            int dealerHand = Dealer.Hand.SumCardsValue();
 
             // If over 17, the dealer stays
+            if (dealerHand > 17)
+            {
+                // Set GameState to CheckingForGameOver and return
+                GameState = GameState.CheckingForGameOver;
+                if (true)
+                {
+                    GameState = GameState.Winner;
+                    PlayAgain();
+                    return;
+                }
 
-            // Set GameState to CheckingForGameOver and return
-            GameState = GameState.CheckingForGameOver;
-            //return;
-            throw new NotImplementedException();
+                throw new ArgumentException("Winner could not be determined.");
+            }
+            // If value of hand is below 17, dealer hits
+            else
+            {
+                GameState = GameState.PerformingMove;
+                dealer.GetCard(Dealer);
+                ResetScreen();
+                DealerPerformsSingleTurn(Dealer);
+            }
         }
 
         /// <summary>
@@ -201,7 +221,7 @@ namespace Blackjack
             }
 
             if (player == Dealer)
-                DealerPerformsSingleTurn();
+                DealerPerformsSingleTurn(player as Dealer);
             else
                 GamblerPerformsSingleTurn(player as Gambler);
         }
@@ -249,6 +269,7 @@ namespace Blackjack
                     isUserInputIncorrect = false;
                     OutputProvider.WriteLine("Okay, goodbye! (Press any key to exit)");
                     InputProvider.Read();
+                    break;
                 }
                 // If user inputs another response, ask the user for a correct input.
                 else
