@@ -14,11 +14,17 @@ namespace Blackjack
         //Name of dealer
         public string Name { get; set; }
         //The cards the dealer has in his hand
-        public List<ICard> Hand { get; set; }
+        public IList<ICard> Hand { get; set; }
         /// <summary>
         /// Constructor for deck when a deck is not specified.
         /// </summary>
         /// <param name="name">Name of the dealer</param>
+
+        //Constructor used for testing
+        public Dealer(IList<ICard> hand)
+        {
+            Hand = hand;
+        }
         public Dealer (string name) : this(new Deck(), name)
         {
         }
@@ -50,6 +56,8 @@ namespace Blackjack
         /// Otherwise the card is added to this players hand</returns>
         public ICard GetCard(IDealer dealer)
         {
+            if (dealer == null)
+                throw new ArgumentNullException();
             ICard card = dealer.Deal();
             this.Hand.Add(card);
             return card;

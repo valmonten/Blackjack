@@ -13,7 +13,7 @@ namespace Blackjack.Interfaces
         string Name { get; set; }
 
         // The cards the player has
-        List<ICard> Hand { get; set; }
+        IList<ICard> Hand { get; set; }
 
         // Asks dealer for another card that gets added to Hand
         ICard GetCard(IDealer dealer);
