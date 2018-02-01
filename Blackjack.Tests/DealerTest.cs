@@ -40,7 +40,7 @@ namespace Blackjack.Tests
             Dealer dealer = new Dealer(mockDeck.Object, "test");
 
             // act
-            ICard card = dealer.GetCard(dealer);
+            ICard card = dealer.Deal();
 
             // assert
             Assert.AreEqual(card.Suit, CardSuit.Heart);
