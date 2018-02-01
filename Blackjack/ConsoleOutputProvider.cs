@@ -12,13 +12,24 @@ namespace Blackjack
     /// </summary>
     public class ConsoleOutputProvider : IOutputProvider
     {
-        public void Print(string output)
-        {
-            Console.WriteLine(output);
-        }
         public void Clear()
         {
             Console.Clear();
+        }
+
+        public void WriteLine(string op)
+        {
+            Console.WriteLine(op);
+        }
+
+        public void WriteLine()
+        {
+            Console.WriteLine();
+        }
+
+        public void Write(string op)
+        {
+            Console.Write(op);
         }
     }
 }
