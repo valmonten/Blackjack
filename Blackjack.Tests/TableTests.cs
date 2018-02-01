@@ -30,17 +30,17 @@ namespace Blackjack.Tests
             //act
             var table1 = new Table(dealer, null);
         }
-        //[TestMethod]
-        //public void TestTableconstructorValid()
-        //{
-        //    //arrange
-        //    var dealer = new Dealer("Bob");
-        //    List<Gambler> players = new List<Gambler> { new Gambler() };
-        //    //act
-        //    var table = new Table(dealer, players);
-        //    //assert
-        //    Assert.AreEqual(dealer.Name, table.Dealer.Name);
-        //    Assert.AreEqual(players.First().Name, table.Players.First().Name);
-        //}
+        [TestMethod]
+        public void TestTableconstructorValid()
+        {
+            //arrange
+            var dealer = new Dealer("Bob");
+            List<Gambler> players = new List<Gambler> { new Gambler("Schmoe") };
+            //act
+            var table = new Table(dealer, players);
+            //assert
+            Assert.AreEqual(dealer.Name, table.Dealer.Name);
+            Assert.AreEqual(players.First().Name, table.Players.First().Name);
+        }
     }
 }
