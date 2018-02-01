@@ -56,7 +56,12 @@ namespace Blackjack
         /// <param name="gambler"></param>
         public void GamblerPerformsSingleTurn(IGambler gambler)
         {
-            // If gambler, prompt for action
+            if (gambler == null)
+            {
+                throw new ArgumentNullException("Gambler cannot be null");
+            }
+
+            // Prompt for action
             OutputProvider.WriteLine("Please Select H to hit or S to stay");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
@@ -206,6 +211,11 @@ namespace Blackjack
 
         public void SwitchTurns(IPlayer player)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException("Player cannot be null");
+            }
+
             if (player == Dealer)
                 DealerPerformsSingleTurn();
             else
