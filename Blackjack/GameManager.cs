@@ -48,19 +48,48 @@ namespace Blackjack
             OutputProvider = outputProvider;
             TableRenderer = tableRenderer;
         }
-        public void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void PerformSingleTurn()
+
+        /// <summary>
+        /// Prompts player to make a choice of hitting or staying, continues until win condition 
+        /// determined, or player stays
+        /// </summary>
+        /// <param name="gambler"></param>
+        public void GamblerPerformsSingleTurn(IGambler gambler)
         {
             // If gambler, prompt for action
             OutputProvider.Print("Please Select H to hit or S to stay");
+            GameState = GameState.WaitingForUserInput;
+            var choice = InputProvider.Read();
+            
             // Once action is received, parse action and execute accordingly
-            // If necessary, prompt for action again
-            // If player stays or busts, end turn and update game state
-            throw new NotImplementedException();
+            GameState = GameState.PerformingMove;
+
+            // If choice is to hit, have dealer deal card to player, and determine if win condition met
+            if (choice == "H")
+            {
+                gambler.GetCard(Dealer);
+
+                // If Win condition met, call play again. If not, perform another turn
+                GameState = GameState.CheckingForGameOver;
+                if (DetermineWinner())
+                {
+                    PlayAgain();
+                    return;
+                }
+                else
+                {
+                    GamblerPerformsSingleTurn(gambler);
+                }
+            }
+
+            // If player stays, switch turns
+            SwitchTurns(Dealer);
+        }
+
+        public void DealerPerformsSingleTurn()
+        {
+
         }
 
         /// <summary>
@@ -162,7 +191,7 @@ namespace Blackjack
             }
             else
             {
-                PerformSingleTurn();
+                PerformSingleTurn(gambler);
             }
 
             // Switch turns
@@ -175,9 +204,12 @@ namespace Blackjack
             PlayAgain();
         }
 
-        public void SwitchTurns()
+        public void SwitchTurns(IPlayer player)
         {
-            throw new NotImplementedException();
+            if (player == Dealer)
+                DealerPerformsSingleTurn();
+            else
+                GamblerPerformsSingleTurn(player as Gambler);
         }
 
         /// <summary>
