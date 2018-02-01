@@ -159,12 +159,13 @@ namespace Blackjack
             OutputProvider.WriteLine();
 
             // Ask user for number of players
-            // Instantiate player(s) and ask for name(s)
+            // Instantiate player(s) and ask for name(s), then instanitate the table
             GameState = GameState.WaitingToStart;
             OutputProvider.WriteLine("Please enter your name, gambler.");
             string gamblerName = InputProvider.Read();
             Gambler gambler = new Gambler(gamblerName);
-
+            Gamblers = new List<IGambler> { gambler };
+            Table = new Table(Dealer, Gamblers);
 
 
             // Deal cards to player and dealer (2 each)
