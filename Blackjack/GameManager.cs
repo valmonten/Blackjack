@@ -89,7 +89,7 @@ namespace Blackjack
 
         public void DealerPerformsSingleTurn()
         {
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Blackjack
             while (isUserInputIncorrect)
             {
                 // Ask user if they want to play again.
-                OutputProvider.Print("Would you like to play another game of Blackjack? (y/n)");
+                OutputProvider.WriteLine("Would you like to play another game of Blackjack? (y/n)");
                 var playerResponse = InputProvider.Read();
 
                 // If user replies "y", then clear the console and reload a new game.
@@ -115,14 +115,14 @@ namespace Blackjack
                 else if (playerResponse == "n")
                 {
                     isUserInputIncorrect = false;
-                    OutputProvider.Print("Okay, goodbye! (Press any key to exit)");
+                    OutputProvider.WriteLine("Okay, goodbye! (Press any key to exit)");
                     InputProvider.Read();
                 }
                 // If user inputs another response, ask the user for a correct input.
                 else
                 {
                     isUserInputIncorrect = true;
-                    OutputProvider.Print("Sorry, could you repeat that?");
+                    OutputProvider.WriteLine("Sorry, could you repeat that?");
                     continue;
                 }
             }
@@ -134,9 +134,9 @@ namespace Blackjack
         public void ResetScreen()
         {
             OutputProvider.Clear();
-            OutputProvider.Print();
-            // Draw the table.
-            OutputProvider.Print();
+            OutputProvider.WriteLine();
+            TableRenderer.Render(Table);
+            OutputProvider.WriteLine();
         }
 
         /// <summary>
@@ -144,13 +144,27 @@ namespace Blackjack
         /// </summary>
         public void StartGame()
         {
-            // Instantiate player and ask for name and instantiate them
+            // Welcome user(s) to the game.
+            string welcomeSign =
+                @"
+                .------..------..------..------..------..------..------..------..------.
+                |B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |
+                | :(): || :/\: || (\/) || :/\: || :/\: || :(): || (\/) || :/\: || :/\: |
+                | ()() || (__) || :\/: || :\/: || :\/: || ()() || :\/: || :\/: || :\/: |
+                | '--'B|| '--'L|| '--'A|| '--'C|| '--'K|| '--'J|| '--'A|| '--'C|| '--'K|
+                `------'`------'`------'`------'`------'`------'`------'`------'`------'
+            ";
+            OutputProvider.WriteLine();
+            Console.SetCursorPosition((Console.WindowWidth - (welcomeSign.Length / 16)) / 2, Console.CursorTop);
+            OutputProvider.WriteLine(welcomeSign);
+            OutputProvider.WriteLine();
 
+            // Ask user for number of players
+            // Instantiate player(s) and ask for name(s)
             GameState = GameState.WaitingToStart;
-            OutputProvider.WriteLine("Please enter your name, gambler");
+            OutputProvider.WriteLine("Please enter your name, gambler.");
             string gamblerName = InputProvider.Read();
-            Gambler gambler = new Gambler();
-            gambler.Name = gamblerName;
+            Gambler gambler = new Gambler(gamblerName);
 
 
 
@@ -164,11 +178,12 @@ namespace Blackjack
                 else
                 {
                     gambler.GetCard(Dealer);
-
                 }
             }
-            // Render table
+
+            // Render table and hands
             TableRenderer.Render(Table);
+
             // Initiate 
             GameState = GameState.Started;
             if (DetermineWinner() == true)
@@ -179,11 +194,13 @@ namespace Blackjack
             {
                 GamblerPerformsSingleTurn(gambler);
             }
+
             // Switch turns
             
-            // Once all turns are down, determine winner
-            
-            // Prompt to play again, if yes repeat cycle, if no reset screen
+            // Once all turns are done, determine winner
+            DetermineWinner();
+
+            // Ask player(s) if they want to play again
             PlayAgain();
         }
 
@@ -195,9 +212,12 @@ namespace Blackjack
                 GamblerPerformsSingleTurn(player as Gambler);
         }
 
+        /// <summary>
+        /// Helper function that gets the amount of points per hand, and determines whether there's a winner
+        /// </summary>
         public bool DetermineWinner()
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
