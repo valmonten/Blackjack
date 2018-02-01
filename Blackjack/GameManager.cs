@@ -56,6 +56,7 @@ namespace Blackjack
         public void PerformSingleTurn()
         {
             // If gambler, prompt for action
+            OutputProvider.Print("Please Select H to hit or S to stay");
             // Once action is received, parse action and execute accordingly
             // If necessary, prompt for action again
             // If player stays or busts, end turn and update game state
@@ -140,7 +141,15 @@ namespace Blackjack
             // Render table
             TableRenderer.Render(Table);
             // Initiate 
-            PerformSingleTurn();
+            GameState = GameState.Started;
+            if (DetermineWinner() == true)
+            {
+                PlayAgain();
+            }
+            else
+            {
+                PerformSingleTurn();
+            }
             // Switch turns
             SwitchTurns();
             // Once all turns are down, determine winner
