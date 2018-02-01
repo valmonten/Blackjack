@@ -105,7 +105,7 @@ namespace Blackjack
                 while (cards.Count < 52)
                 {
                     // if there are too few cards to dequeue in deckLeft
-                    if (deckLeft.Count != 0 && leftNumCardsToAdd > deckLeft.Count)
+                    if (leftNumCardsToAdd > deckLeft.Count)
                     {
                         while (deckLeft.Count != 0)
                         {
@@ -116,7 +116,7 @@ namespace Blackjack
                     }
 
                     // if there are too few cards to dequeue in deckRight
-                    if (deckRight.Count != 0 && rightNumCardsToAdd > deckRight.Count)
+                    if (rightNumCardsToAdd > deckRight.Count)
                     {
                         while (deckRight.Count != 0)
                         {
