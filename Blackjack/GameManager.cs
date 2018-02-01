@@ -186,7 +186,7 @@ namespace Blackjack
             {
                 // Set GameState to CheckingForGameOver and return
                 GameState = GameState.CheckingForGameOver;
-                if (true)
+                if (DetermineWinner())
                 {
                     GameState = GameState.Winner;
                     PlayAgain();
