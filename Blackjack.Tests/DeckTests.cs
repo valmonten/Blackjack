@@ -54,14 +54,36 @@ namespace Blackjack.Tests
         //{
         //}
 
-        //[TestMethod]
-        //public void TestDrawCard()
-        //{
-        //}
+        [TestMethod]
+        public void TestDrawCard1()
+        {
+            // arrange
+            Deck newDeck = new Deck();
+            int expected = 50;
 
-        //[TestMethod]
-        //public void TestGetCardCount()
-        //{
-        //}
+            // act
+            newDeck.Build();
+            newDeck.DrawCard();
+            newDeck.DrawCard();
+            var actual = newDeck.RemainingCardsInDeck();
+
+            // assert
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestMethod]
+        public void TestDrawCardNotNull()
+        {
+            // arrange
+            Deck newDeck = new Deck();
+
+            // act
+            newDeck.Build();
+            var actual = newDeck.DrawCard();
+
+            // assert
+            Assert.IsNotNull(actual);
+        }
     }
 }
