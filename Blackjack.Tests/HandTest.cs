@@ -44,18 +44,6 @@ namespace Blackjack.Tests
             // arrange
             Hand hand = new Hand();
 
-            //var cardAce = new Mock<ICard>(MockBehavior.Strict);
-            //cardAce.Setup(c => c.Face).Returns(CardFace.Ace);
-            //cardAce.Setup(c => c.Value).Returns(1);
-
-            //var card8 = new Mock<ICard>(MockBehavior.Strict);
-            //card8.Setup(c => c.Face).Returns(CardFace.Eight);
-            //card8.Setup(c => c.Value).Returns(8);
-
-            //var cardKing = new Mock<ICard>(MockBehavior.Strict);
-            //cardKing.Setup(c => c.Face).Returns(CardFace.King);
-            //cardKing.Setup(c => c.Value).Returns(13);
-
             var cardAce = new MockCard();
             cardAce.Face = CardFace.Ace;
             cardAce.Value = (int)CardFace.Ace + 1;
@@ -76,16 +64,6 @@ namespace Blackjack.Tests
             int whenAceIs11Sum = 11 + 8;
 
             // act
-            //cardAce.Object.Value = (int)CardFace.Ace;
-
-            //card8.Object.Face = CardFace.Eight;
-            //card8.Object.Value = (int)CardFace.Eight;
-
-            //cardKing.Object.Face = CardFace.King;
-            //cardKing.Object.Value = (int)CardFace.King;
-
-            //hand.AllCards.Add(cardAce.Object);
-            //hand.AllCards.Add(card8.Object);
             hand.AllCards.Add(cardAce);
             hand.AllCards.Add(card8);
             int sum11 = hand.SumCardsValue();
