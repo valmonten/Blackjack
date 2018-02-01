@@ -72,11 +72,5 @@ namespace Blackjack
             throw new NotImplementedException();
         }
 
-
-        void IDeck.RemainingCardsInDeck()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

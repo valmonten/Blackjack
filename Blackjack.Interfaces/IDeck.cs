@@ -31,7 +31,7 @@ namespace Blackjack.Interfaces
         /// <summary>
         /// Remaining number of cards in the deck.
         /// </summary>
-        void RemainingCardsInDeck();
+        int RemainingCardsInDeck();
 
     }
 }

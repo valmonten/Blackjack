@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeckTests.cs" />
+    <Compile Include="DealerTest.cs" />
     <Compile Include="HandTest.cs" />
     <Compile Include="GameManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
