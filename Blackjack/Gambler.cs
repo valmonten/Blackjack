@@ -11,12 +11,15 @@ namespace Blackjack
     {
         public double Money { get; set; }
         public string Name { get; set; }
-        public List<ICard> Hand { get; set; }
+        public IHand Hand { get; set; }
+
+        //TODO:
+        //public List<ICard> Hand { get; set; }
 
         public Gambler(string name)
         {
             Name = name;
-            Hand = new List<ICard>();
+            Hand = new Hand();
         }
 
 
@@ -25,7 +28,7 @@ namespace Blackjack
         /// </summary>
         /// <param name="hand"></param>
         /// <param name="name"></param>
-        public Gambler(List<ICard> hand, string name) : this(name)
+        public Gambler(Hand hand, string name) : this(name)
         {
             Hand = hand;
         }
@@ -47,13 +50,13 @@ namespace Blackjack
         public ICard GetCard(IDealer dealer)
         {
             ICard card = dealer.Deal();
-            this.Hand.Add(card);
+            Hand.AllCards.Add(card);
             return card;
         }
 
         public void ClearHand()
         {
-            Hand = new List<ICard>();
+            Hand = new Hand();
         }
     }
 }
