@@ -16,7 +16,7 @@ namespace Blackjack.Interfaces
         /// <summary>
         /// Shuffles the deck.
         /// </summary>
-        void Shuffle();
+        void Shuffle(int numTimes);
 
         /// <summary>
         /// Clear the deck completely.
