@@ -8,7 +8,8 @@ namespace Blackjack.Interfaces
 { 
     public interface IHand
     {
-        IEnumerable<ICard> AllCards { get; set; }
+        IList<ICard> AllCards { get; set; }
         int Count { get; }
+        int SumCardsValue();
     }
 }
