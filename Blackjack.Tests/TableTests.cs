@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Blackjack.Interfaces;
 using Blackjack;
 using System.Linq;
+using Moq;
 
 namespace Blackjack.Tests
 {
@@ -15,8 +16,8 @@ namespace Blackjack.Tests
         public void TestTableConstructorNullDealer()
         {
             //arrange
-            var gambler = new Gambler("Bob");
-            List<IGambler> players = new List<IGambler>();
+            var player = new Mock<IGambler>(MockBehavior.Strict);
+            List<IGambler> players = new List<IGambler>() { player.Object };
             //act
             var table1 = new Table(null, null);
             var table2 = new Table(null, players);
@@ -26,20 +27,24 @@ namespace Blackjack.Tests
         public void TestTableConstructorNoPlayers()
         {
             //arrange
-            var dealer = new Dealer("Bob");
+            var dealer = new Mock<IDealer>(MockBehavior.Strict);
+            //var dealer = new Dealer("Bob");
             //act
-            var table1 = new Table(dealer, null);
+            var table1 = new Table(dealer.Object, null);
         }
         [TestMethod]
         public void TestTableconstructorValid()
         {
             //arrange
-            var dealer = new Dealer("Bob");
-            List<Gambler> players = new List<Gambler> { new Gambler("Schmoe") };
+            var player = new Mock<IGambler>(MockBehavior.Strict);
+            player.Setup(x => x.Name).Returns("Joe");
+            List<IGambler> players = new List<IGambler>() { player.Object };
+            var dealer = new Mock<IDealer>(MockBehavior.Strict);
+            dealer.Setup(x => x.Name).Returns("Schmoe");
             //act
-            var table = new Table(dealer, players);
+            var table = new Table(dealer.Object, players);
             //assert
-            Assert.AreEqual(dealer.Name, table.Dealer.Name);
+            Assert.AreEqual(dealer.Object.Name, table.Dealer.Name);
             Assert.AreEqual(players.First().Name, table.Players.First().Name);
         }
     }
