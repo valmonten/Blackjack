@@ -24,7 +24,7 @@ namespace Blackjack
         /// <summary>
         /// Instantiates GameManager Class, inheirits overloaded constructor for dependency injection
         /// </summary>
-        public GameManager() : this(new Deck(), new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
+        public GameManager() : this(new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
             new ConsoleTableRenderer())
         {
@@ -39,9 +39,8 @@ namespace Blackjack
         /// <param name="inputProvider"></param>
         /// <param name="outputProvider"></param>
         /// <param name="tableRenderer"></param>
-        public GameManager(IDeck deck, IDealer dealer,
-            IInputProvider inputProvider, IOutputProvider outputProvider,
-            ITableRenderer tableRenderer)
+        public GameManager(IDealer dealer, IInputProvider inputProvider, 
+            IOutputProvider outputProvider, ITableRenderer tableRenderer)
         {
             Dealer = dealer;
             InputProvider = inputProvider;
