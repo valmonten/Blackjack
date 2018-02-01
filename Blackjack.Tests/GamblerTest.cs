@@ -50,17 +50,18 @@ namespace Blackjack.Tests
         {
             // arrange
             var card = new MockCard();
-            Gambler g = new Gambler("test");
+            Gambler gambler = new Gambler("test");
 
             var dealer = new Mock<IDealer>(MockBehavior.Strict);
             dealer.Setup(x => x.Deal()).Returns(card);
 
             // act
-            g.GetCard(dealer.Object);
-            g.GetCard(dealer.Object);
-            g.GetCard(dealer.Object);
+            // passing the MockDealer in gambler.GetCard(IDealer dealer)
+            gambler.GetCard(dealer.Object);
+            gambler.GetCard(dealer.Object);
+            gambler.GetCard(dealer.Object);
 
-            int handCount = g.Hand.Count;
+            int handCount = gambler.Hand.Count;
 
             // assert
             Assert.AreEqual(3, handCount);
