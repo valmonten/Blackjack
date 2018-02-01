@@ -23,6 +23,7 @@ namespace Blackjack.Interfaces
         ITable Table { get; }
         List<IGambler> Gamblers { get;  }
         IDealer Dealer { get;  }
+        Queue<IPlayer> PlayersInOrder { get;  }
         IInputProvider InputProvider { get; }
         IOutputProvider OutputProvider { get; }
         ITableRenderer TableRenderer { get;  }
