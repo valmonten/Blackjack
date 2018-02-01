@@ -78,6 +78,7 @@ namespace Blackjack
                 GameState = GameState.CheckingForGameOver;
                 if (DetermineWinner())
                 {
+                    GameState = GameState.Winner;
                     PlayAgain();
                     return;
                 }
@@ -209,11 +210,18 @@ namespace Blackjack
                 // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
                 
+                // If a Winner was determined in previous call stack, exit out
+                if (GameState == GameState.Winner)
+                {
+                    return;
+                }
                 // Once all turns are done, determine winner
                 DetermineWinner();
 
                 // Ask player(s) if they want to play again
                 PlayAgain();
+
+                return;
             }
             
         }
@@ -236,6 +244,11 @@ namespace Blackjack
         /// </summary>
         public bool DetermineWinner()
         {
+            // Calculate hand of gambler and dealer
+
+            // If either are over 21, that player loses
+
+            // Compare hands, if tie then game is a push. If not, higher value wins and returns
             return false;
         }
     }
