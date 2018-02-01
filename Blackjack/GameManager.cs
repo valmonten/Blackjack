@@ -166,8 +166,6 @@ namespace Blackjack
             string gamblerName = InputProvider.Read();
             Gambler gambler = new Gambler(gamblerName);
 
-
-
             // Deal cards to player and dealer (2 each)
             for (int i = 0; i < 4; i++)
             {
@@ -217,6 +215,12 @@ namespace Blackjack
         /// </summary>
         public bool DetermineWinner()
         {
+            // Check if hand count is 21
+
+            // Check if hand count is over 21
+
+            // Check if hand count is under 21
+
             return false;
         }
     }
