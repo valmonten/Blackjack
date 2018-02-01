@@ -48,6 +48,7 @@
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IOutputProvider.cs" />
     <Compile Include="ICard.cs" />
+    <Compile Include="IHand.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="ITable.cs" />
     <Compile Include="ITableRenderer.cs" />

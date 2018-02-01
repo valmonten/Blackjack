@@ -80,7 +80,7 @@ namespace Blackjack
             if (player == null)
                 throw new ArgumentNullException("Cannot show cards of null");
             //display each card
-            foreach(var card in player.Hand)
+            foreach(var card in player.Hand.AllCards)
             {
                 Console.Write($"({0} of {1}) ", card.Face, card.Suit);
             }
@@ -102,7 +102,7 @@ namespace Blackjack
             //Show visible dealer card
             if (dealer.Hand.Count == 2)
             {
-                var card = dealer.Hand.FirstOrDefault();
+                var card = dealer.Hand.AllCards.FirstOrDefault();
                 Console.Write("( " + card.Face + " of " + card.Suit + ") ");
                 Console.WriteLine();
             }
