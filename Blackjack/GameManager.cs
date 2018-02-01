@@ -48,6 +48,82 @@ namespace Blackjack
             TableRenderer = tableRenderer;
         }
 
+        /// <summary>
+        /// Starts the new game.
+        /// </summary>
+        public void StartGame()
+        {
+            // Welcome user(s) to the game.
+            string welcomeSign =
+                @"
+                .------..------..------..------..------..------..------..------..------.
+                |B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |
+                | :(): || :/\: || (\/) || :/\: || :/\: || :(): || (\/) || :/\: || :/\: |
+                | ()() || (__) || :\/: || :\/: || :\/: || ()() || :\/: || :\/: || :\/: |
+                | '--'B|| '--'L|| '--'A|| '--'C|| '--'K|| '--'J|| '--'A|| '--'C|| '--'K|
+                `------'`------'`------'`------'`------'`------'`------'`------'`------'
+            ";
+            OutputProvider.WriteLine();
+            Console.SetCursorPosition((Console.WindowWidth - (welcomeSign.Length / 16)) / 2, Console.CursorTop);
+            OutputProvider.WriteLine(welcomeSign);
+            OutputProvider.WriteLine();
+
+            // Ask user for number of gamblers
+            // Instantiate player(s), ask for name(s), and add to list of gamblers.
+            GameState = GameState.WaitingToStart;
+            OutputProvider.WriteLine("Please enter your name, gambler.");
+            string gamblerName = InputProvider.Read();
+            Gambler gambler = new Gambler(gamblerName);
+            Gamblers = new List<IGambler> { gambler };
+
+            // Instantiate the table
+            Table = new Table(Dealer, Gamblers);
+
+            // Build a deck for the dealer
+            Dealer.Deck.Build();
+
+            // Deal 2 cards each to gambler and dealer
+            for (int i = 0; i < 4; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Dealer.GetCard(Dealer);
+                }
+                else
+                {
+                    gambler.GetCard(Dealer);
+                }
+            }
+
+            // Render table and hands
+            ResetScreen();
+
+            // Initiate 
+            GameState = GameState.Started;
+            if (DetermineWinner() == true)
+            {
+                PlayAgain();
+            }
+            else
+            {
+                // Turns start and finish within this call stack
+                GamblerPerformsSingleTurn(gambler);
+                
+                // If a Winner was determined in previous call stack, exit out
+                if (GameState == GameState.Winner)
+                {
+                    return;
+                }
+
+                // Once all turns are done, determine winner
+                DetermineWinner();
+
+                // Ask gambler(s) if they want to play again
+                PlayAgain();
+
+                return;
+            }         
+        }
 
         /// <summary>
         /// Prompts player to make a choice of hitting or staying, continues until win condition 
@@ -62,15 +138,15 @@ namespace Blackjack
             }
 
             // Prompt for action
-            OutputProvider.WriteLine("Please Select H to hit or S to stay");
+            OutputProvider.WriteLine("Please select [H] to hit or [S] to stay");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
-            
+
             // Once action is received, parse action and execute accordingly
             GameState = GameState.PerformingMove;
 
             // If choice is to hit, have dealer deal card to player, and determine if win condition met
-            if (choice == "H")
+            if (choice == "H" || choice == "h")
             {
                 gambler.GetCard(Dealer);
                 ResetScreen();
@@ -107,6 +183,48 @@ namespace Blackjack
         }
 
         /// <summary>
+        /// Helper function to clear the screen, and redraw the table.
+        /// </summary>
+        public void ResetScreen()
+        {
+            OutputProvider.Clear();
+            OutputProvider.WriteLine();
+            TableRenderer.Render(Table);
+            OutputProvider.WriteLine();
+        }
+
+        public void SwitchTurns(IPlayer player)
+        {
+            if (player == null)
+            {
+                throw new ArgumentNullException("Player cannot be null");
+            }
+
+            if (player == Dealer)
+                DealerPerformsSingleTurn();
+            else
+                GamblerPerformsSingleTurn(player as Gambler);
+        }
+
+        /// <summary>
+        /// Helper function that gets the amount of points per hand, and determines whether there's a winner
+        /// </summary>
+        public bool DetermineWinner()
+        {
+            // Calculate hand of gambler and dealer
+
+            // If both hands are the same, then tie
+
+            // If a hand is 21, then that player wins
+
+            // If a hand is over 21, then that player loses
+
+            // Otherwise, higher value wins
+
+            return false;
+        }
+
+        /// <summary>
         /// Helper function to ask user if they want to play the game again.
         /// </summary>
         public void PlayAgain()
@@ -140,122 +258,6 @@ namespace Blackjack
                     continue;
                 }
             }
-        }
-
-        /// <summary>
-        /// Helper function to clear the screen, and redraw the table.
-        /// </summary>
-        public void ResetScreen()
-        {
-            OutputProvider.Clear();
-            OutputProvider.WriteLine();
-            TableRenderer.Render(Table);
-            OutputProvider.WriteLine();
-        }
-
-        /// <summary>
-        /// Starts the new game.
-        /// </summary>
-        public void StartGame()
-        {
-            // Welcome user(s) to the game.
-            string welcomeSign =
-                @"
-                .------..------..------..------..------..------..------..------..------.
-                |B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |
-                | :(): || :/\: || (\/) || :/\: || :/\: || :(): || (\/) || :/\: || :/\: |
-                | ()() || (__) || :\/: || :\/: || :\/: || ()() || :\/: || :\/: || :\/: |
-                | '--'B|| '--'L|| '--'A|| '--'C|| '--'K|| '--'J|| '--'A|| '--'C|| '--'K|
-                `------'`------'`------'`------'`------'`------'`------'`------'`------'
-            ";
-            OutputProvider.WriteLine();
-            Console.SetCursorPosition((Console.WindowWidth - (welcomeSign.Length / 16)) / 2, Console.CursorTop);
-            OutputProvider.WriteLine(welcomeSign);
-            OutputProvider.WriteLine();
-
-            // Ask user for number of players
-            // Instantiate player(s) and ask for name(s), then instanitate the table
-            GameState = GameState.WaitingToStart;
-            OutputProvider.WriteLine("Please enter your name, gambler.");
-            string gamblerName = InputProvider.Read();
-            Gambler gambler = new Gambler(gamblerName);
-            Gamblers = new List<IGambler> { gambler };
-            Table = new Table(Dealer, Gamblers);
-
-
-            // Deal cards to player and dealer (2 each)
-            for (int i = 0; i < 4; i++)
-            {
-                if (i % 2 == 0)
-                {
-                    Dealer.GetCard(Dealer);
-                }
-                else
-                {
-                    gambler.GetCard(Dealer);
-                }
-            }
-
-            // Render table and hands
-            TableRenderer.Render(Table);
-
-            // Initiate 
-            GameState = GameState.Started;
-            if (DetermineWinner() == true)
-            {
-                PlayAgain();
-            }
-            else
-            {
-                // Turns start and finish within this call stack
-                GamblerPerformsSingleTurn(gambler);
-                
-                // If a Winner was determined in previous call stack, exit out
-                if (GameState == GameState.Winner)
-                {
-                    return;
-                }
-                // Once all turns are done, determine winner
-                DetermineWinner();
-
-                // Ask player(s) if they want to play again
-                PlayAgain();
-
-                return;
-            }
-            
-        }
-
-        public void SwitchTurns(IPlayer player)
-        {
-            if (player == null)
-            {
-                throw new ArgumentNullException("Player cannot be null");
-            }
-
-            if (player == Dealer)
-                DealerPerformsSingleTurn();
-            else
-                GamblerPerformsSingleTurn(player as Gambler);
-        }
-
-        /// <summary>
-        /// Helper function that gets the amount of points per hand, and determines whether there's a winner
-        /// </summary>
-        public bool DetermineWinner()
-        {
-            // Calculate hand of gambler and dealer
-
-            // If either are over 21, that player loses
-
-            // Compare hands, if tie then game is a push. If not, higher value wins and returns
-            // Check if hand count is 21
-
-            // Check if hand count is over 21
-
-            // Check if hand count is under 21
-
-            return false;
         }
     }
 }
