@@ -10,26 +10,26 @@ namespace Blackjack.Tests
     [TestClass]
     public class TableTests
     {
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentNullException))]
-        //public void TestTableConstructorNullDealer()
-        //{
-        //    //arrange
-        //    var gambler = new Gambler();
-        //    List<IGambler> players = new List<IGambler>();
-        //    //act
-        //    var table1 = new Table(null, null);
-        //    var table2 = new Table(null, players);
-        //}
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentNullException))]
-        //public void TestTableConstructorNoPlayers()
-        //{
-        //    //arrange
-        //    var dealer = new Dealer("Bob");
-        //    //act
-        //    var table1 = new Table(dealer, null);
-        //}
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestTableConstructorNullDealer()
+        {
+            //arrange
+            var gambler = new Gambler("Bob");
+            List<IGambler> players = new List<IGambler>();
+            //act
+            var table1 = new Table(null, null);
+            var table2 = new Table(null, players);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestTableConstructorNoPlayers()
+        {
+            //arrange
+            var dealer = new Dealer("Bob");
+            //act
+            var table1 = new Table(dealer, null);
+        }
         //[TestMethod]
         //public void TestTableconstructorValid()
         //{
