@@ -69,7 +69,7 @@ namespace Blackjack
             if (choice == "H")
             {
                 gambler.GetCard(Dealer);
-
+                ResetScreen();
                 // If Win condition met, call play again. If not, perform another turn
                 GameState = GameState.CheckingForGameOver;
                 if (DetermineWinner())
@@ -147,7 +147,7 @@ namespace Blackjack
             // Instantiate player and ask for name and instantiate them
 
             GameState = GameState.WaitingToStart;
-            OutputProvider.Print("Please enter your name, gambler");
+            OutputProvider.WriteLine("Please enter your name, gambler");
             string gamblerName = InputProvider.Read();
             Gambler gambler = new Gambler();
             gambler.Name = gamblerName;
