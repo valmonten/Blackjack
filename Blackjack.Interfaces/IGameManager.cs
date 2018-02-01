@@ -19,10 +19,13 @@ namespace Blackjack.Interfaces
     public interface IGameManager
     {
         GameState GameState { get; }
-        IDeck Deck { get;  }
+
         ITable Table { get; }
-        List<IPlayer> Gambler { get;  }
-        IPlayer Dealer { get;  }
+        List<IGambler> Gamblers { get;  }
+        IDealer Dealer { get;  }
+        IInputProvider InputProvider { get; }
+        IOutputProvider OutputProvider { get; }
+        ITableRenderer TableRenderer { get;  }
 
         void StartGame();
 

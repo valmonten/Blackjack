@@ -11,14 +11,43 @@ namespace Blackjack
     {
         public GameState GameState { get; private set; }
 
-        public IDeck Deck => throw new NotImplementedException();
+        public ITable Table { get; private set; }
 
-        public ITable Table => throw new NotImplementedException();
+        public List<IGambler> Gamblers { get; private set; }
 
-        public List<IPlayer> Gambler => throw new NotImplementedException();
+        public IDealer Dealer { get; private set; }
 
-        public IPlayer Dealer => throw new NotImplementedException();
+        public IInputProvider InputProvider { get; private set; }
+        public IOutputProvider OutputProvider { get; private set; }
+        public ITableRenderer TableRenderer { get; private set; }
 
+        /// <summary>
+        /// Instantiates GameManager Class, inheirits overloaded constructor for dependency injection
+        /// </summary>
+        public GameManager() : this(new Deck(), new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
+            new ConsoleOutputProvider(),
+            new ConsoleTableRenderer())
+        {
+
+        }
+
+        /// <summary>
+        /// Overloaded constructor for dependency injection
+        /// </summary>
+        /// <param name="deck"></param>
+        /// <param name="dealer"></param>
+        /// <param name="inputProvider"></param>
+        /// <param name="outputProvider"></param>
+        /// <param name="tableRenderer"></param>
+        public GameManager(IDeck deck, IDealer dealer,
+            IInputProvider inputProvider, IOutputProvider outputProvider,
+            ITableRenderer tableRenderer)
+        {
+            Dealer = dealer;
+            InputProvider = inputProvider;
+            OutputProvider = outputProvider;
+            TableRenderer = tableRenderer;
+        }
         public void DirectGamblerChoice(IInputProvider inputProvider, IChoiceProvider choiceProvider, IPlayer gambler, IPlayer dealer)
         {
             throw new NotImplementedException();
@@ -26,6 +55,11 @@ namespace Blackjack
 
         public void PerformSingleTurn()
         {
+            // If gambler, prompt for action
+            OutputProvider.Print("Please Select H to hit or S to stay");
+            // Once action is received, parse action and execute accordingly
+            // If necessary, prompt for action again
+            // If player stays or busts, end turn and update game state
             throw new NotImplementedException();
         }
 
@@ -81,15 +115,47 @@ namespace Blackjack
         /// </summary>
         public void StartGame()
         {
-            // Instantiate player and ask for name, instantiate dealer and table and deck
+            // Instantiate player and ask for name and instantiate them
+
+            GameState = GameState.WaitingToStart;
+            OutputProvider.Print("Please enter your name, gambler");
+            string gamblerName = InputProvider.Read();
+            Gambler gambler = new Gambler();
+            gambler.Name = gamblerName;
+
+
+
             // Deal cards to player and dealer (2 each)
+            for (int i = 0; i < 4; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Dealer.GetCard(Dealer);
+                }
+                else
+                {
+                    gambler.GetCard(Dealer);
+
+                }
+            }
             // Render table
-            // Initiate turns
-            // Perform action(s)
+            TableRenderer.Render(Table);
+            // Initiate 
+            GameState = GameState.Started;
+            if (DetermineWinner() == true)
+            {
+                PlayAgain();
+            }
+            else
+            {
+                PerformSingleTurn();
+            }
             // Switch turns
-            // Check/update game state
+            SwitchTurns();
             // Once all turns are down, determine winner
+            DetermineWinner();
             // Prompt to play again, if yes repeat cycle, if no reset screen
+            PlayAgain();
         }
 
         public void SwitchTurns()
