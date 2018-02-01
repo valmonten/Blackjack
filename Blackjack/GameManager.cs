@@ -24,7 +24,7 @@ namespace Blackjack
         /// <summary>
         /// Instantiates GameManager Class, inheirits overloaded constructor for dependency injection
         /// </summary>
-        public GameManager() : this(new Deck(), new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
+        public GameManager() : this(new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
             new ConsoleTableRenderer())
         {
@@ -39,9 +39,8 @@ namespace Blackjack
         /// <param name="inputProvider"></param>
         /// <param name="outputProvider"></param>
         /// <param name="tableRenderer"></param>
-        public GameManager(IDeck deck, IDealer dealer,
-            IInputProvider inputProvider, IOutputProvider outputProvider,
-            ITableRenderer tableRenderer)
+        public GameManager(IDealer dealer, IInputProvider inputProvider, 
+            IOutputProvider outputProvider, ITableRenderer tableRenderer)
         {
             Dealer = dealer;
             InputProvider = inputProvider;
@@ -57,7 +56,12 @@ namespace Blackjack
         /// <param name="gambler"></param>
         public void GamblerPerformsSingleTurn(IGambler gambler)
         {
-            // If gambler, prompt for action
+            if (gambler == null)
+            {
+                throw new ArgumentNullException("Gambler cannot be null");
+            }
+
+            // Prompt for action
             OutputProvider.WriteLine("Please Select H to hit or S to stay");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
@@ -74,6 +78,7 @@ namespace Blackjack
                 GameState = GameState.CheckingForGameOver;
                 if (DetermineWinner())
                 {
+                    GameState = GameState.Winner;
                     PlayAgain();
                     return;
                 }
@@ -89,6 +94,15 @@ namespace Blackjack
 
         public void DealerPerformsSingleTurn()
         {
+            // Calculate dealer's current hand
+
+            // If value of hand is below 17, dealer hits
+
+            // If over 17, the dealer stays
+
+            // Set GameState to CheckingForGameOver and return
+            GameState = GameState.CheckingForGameOver;
+            //return;
             throw new NotImplementedException();
         }
 
@@ -160,12 +174,13 @@ namespace Blackjack
             OutputProvider.WriteLine();
 
             // Ask user for number of players
-            // Instantiate player(s) and ask for name(s)
+            // Instantiate player(s) and ask for name(s), then instanitate the table
             GameState = GameState.WaitingToStart;
             OutputProvider.WriteLine("Please enter your name, gambler.");
             string gamblerName = InputProvider.Read();
             Gambler gambler = new Gambler(gamblerName);
-
+            Gamblers = new List<IGambler> { gambler };
+            Table = new Table(Dealer, Gamblers);
 
 
             // Deal cards to player and dealer (2 each)
@@ -192,20 +207,32 @@ namespace Blackjack
             }
             else
             {
+                // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
+                
+                // If a Winner was determined in previous call stack, exit out
+                if (GameState == GameState.Winner)
+                {
+                    return;
+                }
+                // Once all turns are done, determine winner
+                DetermineWinner();
+
+                // Ask player(s) if they want to play again
+                PlayAgain();
+
+                return;
             }
-
-            // Switch turns
             
-            // Once all turns are done, determine winner
-            DetermineWinner();
-
-            // Ask player(s) if they want to play again
-            PlayAgain();
         }
 
         public void SwitchTurns(IPlayer player)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException("Player cannot be null");
+            }
+
             if (player == Dealer)
                 DealerPerformsSingleTurn();
             else
@@ -217,6 +244,11 @@ namespace Blackjack
         /// </summary>
         public bool DetermineWinner()
         {
+            // Calculate hand of gambler and dealer
+
+            // If either are over 21, that player loses
+
+            // Compare hands, if tie then game is a push. If not, higher value wins and returns
             return false;
         }
     }
