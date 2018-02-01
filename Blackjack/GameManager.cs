@@ -179,5 +179,13 @@ namespace Blackjack
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Helper function that gets the amount of points per hand, and determines whether there's a winner
+        /// </summary>
+        public bool DetermineWinner()
+        {
+            return false;
+        }
     }
 }

@@ -16,8 +16,8 @@ namespace Blackjack
 
         public static void NewGame()
         {
-            //GameManager newGame = new GameManager();
-            //newGame.StartGame();
+            GameManager newGame = new GameManager();
+            newGame.StartGame();
         }
     }
 }
