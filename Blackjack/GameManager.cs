@@ -195,7 +195,7 @@ namespace Blackjack
 
             // Switch turns
             
-            // Once all turns are down, determine winner
+            // Once all turns are done, determine winner
             DetermineWinner();
 
             // Ask player(s) if they want to play again
