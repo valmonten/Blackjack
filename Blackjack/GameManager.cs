@@ -28,7 +28,7 @@ namespace Blackjack
         /// </summary>
         public GameManager() : this(new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
-            new ConsoleTableRenderer(), new Queue<IPlayer>())
+            new ConsoleTableRenderer(), new Queue<IPlayer>(), new List<IGambler>())
         {
 
         }
@@ -42,13 +42,14 @@ namespace Blackjack
         /// <param name="outputProvider"></param>
         /// <param name="tableRenderer"></param>
         public GameManager(IDealer dealer, IInputProvider inputProvider, 
-            IOutputProvider outputProvider, ITableRenderer tableRenderer, Queue<IPlayer> playersInOrder)
+            IOutputProvider outputProvider, ITableRenderer tableRenderer, Queue<IPlayer> playersInOrder, List<IGambler> gamblers)
         {
             Dealer = dealer;
             InputProvider = inputProvider;
             OutputProvider = outputProvider;
             TableRenderer = tableRenderer;
             PlayersInOrder = playersInOrder;
+            Gamblers = gamblers;
         }
 
         /// <summary>
