@@ -47,9 +47,13 @@ namespace Blackjack
         // Draw card method
         public ICard DrawCard()
         {
-            Card cardToReturn = cards[cards.Count - 1];
+            if (cards.Count == 0) //Check if Deck is not empty 
+            {
+                this.Build();
+            }
+            Card cardDrawn = cards[cards.Count - 1];
             cards.RemoveAt(cards.Count - 1);
-            return cardToReturn;
+            return cardDrawn;
         }
 
         // Remaining cards method
@@ -148,12 +152,6 @@ namespace Blackjack
                 }
                 numTimes--;
             }
-        }
-
-
-        void IDeck.RemainingCardsInDeck()
-        {
-            throw new NotImplementedException();
         }
 
     }
