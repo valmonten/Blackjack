@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Blackjack.Interfaces;
 using Blackjack;
+using System.Collections.Generic;
 
 namespace Blackjack.Tests
 {
@@ -17,11 +18,12 @@ namespace Blackjack.Tests
             var inputProvider = new ConsoleInputProvider();
             var outputProvider = new ConsoleOutputProvider();
             var tableRenderer = new ConsoleTableRenderer();
+            var playersInOrder = new Queue<IPlayer>();
 
 
             // Act
             GameManager gameManager = new GameManager(dealer, inputProvider, 
-                outputProvider, tableRenderer);
+                outputProvider, tableRenderer, playersInOrder);
 
 
             // Assert
@@ -29,6 +31,7 @@ namespace Blackjack.Tests
             Assert.AreEqual(inputProvider, gameManager.InputProvider);
             Assert.AreEqual(outputProvider, gameManager.OutputProvider);
             Assert.AreEqual(tableRenderer, gameManager.TableRenderer);
+            Assert.AreEqual(playersInOrder, gameManager.PlayersInOrder);
         }
 
         [TestMethod]
@@ -42,6 +45,36 @@ namespace Blackjack.Tests
             Assert.IsNotNull(gameManager.InputProvider);
             Assert.IsNotNull(gameManager.OutputProvider);
             Assert.IsNotNull(gameManager.TableRenderer);
+        }
+
+        [TestMethod]
+        public void TestDetermineWinner()
+        {
+            // Arrange
+            GameManager gameManager = new GameManager();
+            GameManager gameManager2 = new GameManager();
+            var mockGambler1 = new Mock<IGambler>(MockBehavior.Strict);
+            var mockDealer1 = new Mock<IDealer>(MockBehavior.Strict);
+            mockGambler1.Setup(x => x.Hand.SumCardsValue()).Returns(15);
+            mockDealer1.Setup(x => x.Hand.SumCardsValue()).Returns(16);
+
+            gameManager.PlayersInOrder.Enqueue(mockGambler1.Object);
+            gameManager.PlayersInOrder.Enqueue(mockDealer1.Object);
+            bool expected = true;
+
+            gameManager2.PlayersInOrder.Enqueue(mockGambler1.Object);
+            gameManager2.PlayersInOrder.Enqueue(mockDealer1.Object);
+            bool expected2 = false;
+
+            // Act
+            gameManager.PlayersInOrder.Dequeue();
+            gameManager.PlayersInOrder.Dequeue();
+            bool actual = gameManager.DetermineWinner(mockGambler1.Object, mockDealer1.Object);
+            bool actual2 = gameManager2.DetermineWinner(mockGambler1.Object, mockDealer1.Object);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected2, actual2);
         }
     }
 }

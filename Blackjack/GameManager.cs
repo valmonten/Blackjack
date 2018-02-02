@@ -16,6 +16,7 @@ namespace Blackjack
         public List<IGambler> Gamblers { get; private set; }
 
         public IDealer Dealer { get; private set; }
+        public Queue<IPlayer> PlayersInOrder { get; private set; }
 
         public IInputProvider InputProvider { get; private set; }
         public IOutputProvider OutputProvider { get; private set; }
@@ -26,7 +27,7 @@ namespace Blackjack
         /// </summary>
         public GameManager() : this(new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
-            new ConsoleTableRenderer())
+            new ConsoleTableRenderer(), new Queue<IPlayer>())
         {
 
         }
@@ -40,12 +41,13 @@ namespace Blackjack
         /// <param name="outputProvider"></param>
         /// <param name="tableRenderer"></param>
         public GameManager(IDealer dealer, IInputProvider inputProvider, 
-            IOutputProvider outputProvider, ITableRenderer tableRenderer)
+            IOutputProvider outputProvider, ITableRenderer tableRenderer, Queue<IPlayer> playersInOrder)
         {
             Dealer = dealer;
             InputProvider = inputProvider;
             OutputProvider = outputProvider;
             TableRenderer = tableRenderer;
+            PlayersInOrder = playersInOrder;
         }
 
         /// <summary>
@@ -76,6 +78,10 @@ namespace Blackjack
             Gambler gambler = new Gambler(gamblerName);
             Gamblers = new List<IGambler> { gambler };
 
+            // Add players to queue, gambler first
+            PlayersInOrder.Enqueue(gambler);
+            PlayersInOrder.Enqueue(Dealer);
+
             // Instantiate the table
             Table = new Table(Dealer, Gamblers);
 
@@ -103,28 +109,16 @@ namespace Blackjack
 
             // Initiate 
             GameState = GameState.Started;
-            if (DetermineWinner() == true)
+            if (DetermineWinner(gambler, Dealer) == true)
             {
                 PlayAgain();
+                return;
             }
             else
             {
                 // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
-                
-                // If a Winner was determined in previous call stack, exit out
-                if (GameState == GameState.Winner)
-                {
-                    return;
-                }
 
-                // Once all turns are done, determine winner
-                DetermineWinner();
-
-                // Ask gambler(s) if they want to play again
-                PlayAgain();
-
-                return;
             }         
         }
 
@@ -155,8 +149,16 @@ namespace Blackjack
                 ResetScreen();
                 // If Win condition met, call play again. If not, perform another turn
                 GameState = GameState.CheckingForGameOver;
-                if (DetermineWinner())
+                if (gambler.Hand.SumCardsValue() == 21)
                 {
+                    OutputProvider.WriteLine("YOU HAVE 21! Let's see what the dealer does");
+                    PlayersInOrder.Dequeue();
+                    SwitchTurns(Dealer);
+                    return;
+                }
+                else if (gambler.Hand.SumCardsValue() > 21)
+                {
+                    OutputProvider.WriteLine("BUSTED! YOU LOSE!");
                     GameState = GameState.Winner;
                     PlayAgain();
                     return;
@@ -166,9 +168,20 @@ namespace Blackjack
                     GamblerPerformsSingleTurn(gambler);
                 }
             }
-
-            // If player stays, switch turns
-            SwitchTurns(Dealer);
+            // If player selects stay, switch turns
+            else if (choice == "S" || choice == "s")
+            {
+                PlayersInOrder.Dequeue();
+                SwitchTurns(Dealer);
+            }
+            // If any other button is pushed, display error message and try again.
+            else
+            {
+                OutputProvider.WriteLine("Invalid button selected!");
+                OutputProvider.WriteLine("Press any key to try again");
+                InputProvider.Read();
+                GamblerPerformsSingleTurn(gambler);
+            }
         }
 
         public void DealerPerformsSingleTurn(IDealer dealer)
@@ -178,6 +191,8 @@ namespace Blackjack
                 throw new ArgumentNullException("Dealer cannot be null!");
             }
 
+            
+
             Table.CompleteAllHands();
 
             // Calculate dealer's current hand
@@ -186,9 +201,10 @@ namespace Blackjack
             // If over 17, the dealer stays
             if (dealerHand > 17)
             {
+                PlayersInOrder.Dequeue();
                 // Set GameState to CheckingForGameOver and return
                 GameState = GameState.CheckingForGameOver;
-                if (DetermineWinner())
+                if (DetermineWinner(Gamblers[0], Dealer))
                 {
                     GameState = GameState.Winner;
                     PlayAgain();
@@ -234,19 +250,60 @@ namespace Blackjack
         /// <summary>
         /// Helper function that gets the amount of points per hand, and determines whether there's a winner
         /// </summary>
-        public bool DetermineWinner()
+        public bool DetermineWinner(IGambler gambler, IDealer dealer)
         {
             // Calculate hand of gambler and dealer
+            int dealerHandVal = Dealer.Hand.SumCardsValue();
+            int gamblerHandVal = gambler.Hand.SumCardsValue();
 
-            // If both hands are the same, then tie
+            // If queue is not empty, and nobody is over 21 then return false
 
-            // If a hand is 21, then that player wins
+            // If queue > 0, and dealer has blackjack, dealer automatically wins
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
+            {
+                OutputProvider.WriteLine("DEALER HAS BLACKJACK YOU LOSE");
+                GameState = GameState.Winner;
+                return true;
+            }
 
-            // If a hand is over 21, then that player loses
+            // If Queue > 0, dealer has < 21, and player has 21, player wins
+            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
+            {
+                Table.CompleteAllHands();
+                OutputProvider.WriteLine("YOU WIN!");
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal < 21)
+            {
+                return false;
+            }
+
+            // If both hands are the same and the queue is empty, game is a push
+            else if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
+            {
+                OutputProvider.WriteLine("PUSH!");
+            }
 
             // Otherwise, higher value wins
+            else if (dealerHandVal > gamblerHandVal && PlayersInOrder.Count < 1)
+            {
+                OutputProvider.WriteLine("YOU LOSE!");
+            }
 
-            return false;
+            else if (gamblerHandVal > dealerHandVal && PlayersInOrder.Count < 1)
+            {
+                OutputProvider.WriteLine("YOU WIN!");
+            }
+
+            else if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
+            {
+                OutputProvider.WriteLine("DEALER BUSTED! YOU WIN!");
+            }
+
+            GameState = GameState.Winner;
+            return true;
         }
 
         /// <summary>
