@@ -47,7 +47,11 @@ namespace Blackjack.Tests
             var cardAce = new MockCard();
             cardAce.Face = CardFace.Ace;
             cardAce.Value = 11;
-            
+
+            var cardAce2 = new MockCard();
+            cardAce.Face = CardFace.Ace;
+            cardAce.Value = 11;
+
             var card6 = new MockCard();
             card6.Face = CardFace.Six;
             card6.Value = 6;
@@ -68,7 +72,7 @@ namespace Blackjack.Tests
 
 
             int expectedSumWhenAceIs_11 = 11 + cardKing.Value;
-            int expectedSumWhenAceIs_1 = 1 + card6.Value + card7.Value + card8.Value + cardKing.Value;
+            int expectedSumWhenAceIs_1 = 1 + 1 + card6.Value + card7.Value + cardKing.Value;
 
             // act
 
@@ -83,23 +87,20 @@ namespace Blackjack.Tests
             // Add more cards to make the sum greater than 21, so that Ace value is 1
             hand.AllCards.Add(card6);
             hand.AllCards.Add(card7);
-            hand.AllCards.Add(card8);
+            hand.AllCards.Add(cardAce2);
             int actualSumWhenAceIs_1 = hand.SumCardsValue();
-            int AceValue1 = hand.AllCards
-                .FirstOrDefault(c => c.Face == CardFace.Ace)
-                .Value;
-
-            //TODO:
-            //int sum = hand.SumCardsValue();
-            //int ace = hand.AllCards.FirstOrDefault(c => c.Face == CardFace.Ace).Value;
-            //Assert.AreEqual(1, ace);
-            //Assert.AreEqual(15, sum);
+            //int AceValue1 = hand.AllCards
+            //    .FirstOrDefault(c => c.Face == CardFace.Ace)
+            //    .Value;
+            int[] expectedAceValues = new int[] { 1, 1 };
+            int[] aceValue1 = hand.AllCards.Where(c => c.Face == CardFace.Ace).Select(cv => cv.Value).ToArray();
 
             // assert
             Assert.AreEqual(expectedSumWhenAceIs_11, actualSumWhenAceIs_11);
             Assert.AreEqual(11, AceValue11);
             Assert.AreEqual(expectedSumWhenAceIs_1, actualSumWhenAceIs_1);
-            Assert.AreEqual(1, AceValue1);
+            //Assert.AreEqual(1, AceValue1);
+            CollectionAssert.AreEqual(expectedAceValues, aceValue1);
 
         }
     }
