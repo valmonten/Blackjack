@@ -2,6 +2,7 @@
 using Blackjack.Interfaces;
 using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace Blackjack.Tests
 {
@@ -33,42 +34,38 @@ namespace Blackjack.Tests
         public void TestDeal()
         {
             // arrange
-            Dealer dealer = new Dealer("test");
-            dealer.Deck.Build();
+            var mockDeck = new Mock<IDeck>(MockBehavior.Strict);
+            mockDeck.Setup(x => x.DrawCard()).Returns(new Card(CardSuit.Heart , CardFace.King, 10));
 
-            int expectedRemaining = 52 - 4;
-            int expectedHandCount = 4;
+            Dealer dealer = new Dealer(mockDeck.Object, "test");
 
             // act
-            ICard card = dealer.GetCard(dealer);
-            ICard card1 = dealer.GetCard(dealer);
-            ICard card2 = dealer.GetCard(dealer);
-            ICard card3 = dealer.GetCard(dealer);
-            int actualRemaining = dealer.Deck.RemainingCardsInDeck();
-            int actualHandCount = dealer.Hand.Count;
+            ICard card = dealer.Deal();
 
             // assert
-            Assert.AreEqual(expectedRemaining, actualRemaining);
-            Assert.AreEqual(expectedHandCount, actualHandCount);
+            Assert.AreEqual(card.Suit, CardSuit.Heart);
         }
 
         [TestMethod]
         public void TestClearHand()
         {
             // arrange
-            Dealer dealer = new Dealer("test");
-            dealer.Deck.Build();
+            var mockHand = new Mock<IHand>(MockBehavior.Strict);
+            var mockCard = new Mock<ICard>(MockBehavior.Strict);
+            List<ICard> cards = new List<ICard> { mockCard.Object };
 
-            // act
-            dealer.GetCard(dealer);
-            dealer.GetCard(dealer);
-            dealer.GetCard(dealer);
-            dealer.GetCard(dealer);
+            mockHand.Setup(x => x.AllCards).Returns(cards);
+            
+            Dealer dealer = new Dealer(mockHand.Object);
+            
+            //Assert hand has the mock card
+            Assert.AreEqual(1, dealer.Hand.AllCards.Count);
 
+            //Act
             dealer.ClearHand();
 
-            // assert
-            Assert.AreEqual(0, dealer.Hand.Count);
+            // Assert hand cleared the mock card
+            Assert.AreEqual(0, dealer.Hand.AllCards.Count);
         }
     }
 }

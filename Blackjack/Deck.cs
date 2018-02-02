@@ -28,13 +28,13 @@ namespace Blackjack
             // List of card suits
             var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>().ToList();
 
-            // Array of card faces
+            // List of card faces
             var cardFaces = Enum.GetValues(typeof(CardFace)).Cast<CardFace>().ToList();
 
-            // Array of values
+            // Array of default card values that correspond with Enum of CardFace
             int[] faceValues = new int[] { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
 
-            // Create deck of cards
+            // Creates deck of cards, which will each have a suit, face, and value.
             for (var i = 0; i < suits.Count; i++)
             {
                 for (var j = 0; j < cardFaces.Count; j++)
@@ -64,7 +64,7 @@ namespace Blackjack
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            cards.RemoveRange(0, cards.Count);
         }
 
         /// <summary>
@@ -73,7 +73,85 @@ namespace Blackjack
         /// <param name="numTimes">Number of times deck is to be shuffled.</param>
         public void Shuffle(int numTimes)
         {
-            throw new NotImplementedException();
+            // Variables used to help split the deck in half.
+            var totalNumCards = cards.Count;
+            int halfNumCards = totalNumCards / 2;
+
+            // Generate random number of cards to skip when riffle shuffling.
+            Random randNumCardToAdd = new Random();
+
+            // Creates two empty half-decks to be shuffled together.
+            var deckLeft = new Queue<Card>();
+            var deckRight = new Queue<Card>();
+
+            // Shuffle the deck according to the number of times specified.
+            while (numTimes > 0)
+            {
+                // Loops through current deck and adds all cards in the top half into deckLeft.
+                for (var i = 0; i < halfNumCards; i++)
+                {
+                    deckLeft.Enqueue(cards[i]);
+                }
+
+                // Loops through current deck and adds all cards in the bottom half into deckRight.
+                for (var i = totalNumCards - 1; i >= halfNumCards; i--)
+                {
+                    deckRight.Enqueue(cards[i]);
+                }
+
+                // Removes all cards from deck to prepare for new cards.
+                cards.RemoveRange(0, cards.Count);
+
+                // Generates random number of cards to add back to the deck per turn from both the left and right half-decks when shuffling.
+                var leftNumCardsToAdd = randNumCardToAdd.Next(1, 4);
+                var rightNumCardsToAdd = randNumCardToAdd.Next(1, 4);
+
+                while (cards.Count < 52)
+                {
+                    // if there are too few cards to dequeue in deckLeft
+                    if (leftNumCardsToAdd > deckLeft.Count)
+                    {
+                        while (deckLeft.Count != 0)
+                        {
+                            var leftCard = deckLeft.Dequeue();
+                            cards.Add(leftCard);
+                        }
+                        leftNumCardsToAdd = 0;
+                    }
+
+                    // if there are too few cards to dequeue in deckRight
+                    if (rightNumCardsToAdd > deckRight.Count)
+                    {
+                        while (deckRight.Count != 0)
+                        {
+                            var rightCard = deckRight.Dequeue();
+                            cards.Add(rightCard);
+                        }
+                        rightNumCardsToAdd = 0;
+                    }
+
+                    // Remove cards from leftCardDeck and adds it to the main Deck
+                    if (deckLeft.Count > 0)
+                    {
+                        for (var i = 1; i <= leftNumCardsToAdd; i++)
+                        {
+                            var leftCard = deckLeft.Dequeue();
+                            cards.Add(leftCard);
+                        }
+                    }
+
+                    // Remove cards from rightCardDeck and adds it to the main Deck
+                    if (deckRight.Count > 0)
+                    {
+                        for (var i = 1; i <= rightNumCardsToAdd; i++)
+                        {
+                            var rightCard = deckRight.Dequeue();
+                            cards.Add(rightCard);
+                        }
+                    }
+                }
+                numTimes--;
+            }
         }
 
     }
