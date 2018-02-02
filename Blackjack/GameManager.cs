@@ -118,20 +118,7 @@ namespace Blackjack
             {
                 // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
-                
-                // If a Winner was determined in previous call stack, exit out
-                if (GameState == GameState.Winner)
-                {
-                    return;
-                }
 
-                // Once all turns are done, determine winner
-                DetermineWinner(gambler, Dealer);
-
-                // Ask gambler(s) if they want to play again
-                PlayAgain();
-
-                return;
             }         
         }
 
@@ -214,7 +201,7 @@ namespace Blackjack
             {
                 // Set GameState to CheckingForGameOver and return
                 GameState = GameState.CheckingForGameOver;
-                if (DetermineWinner())
+                if (DetermineWinner(Gamblers[0], Dealer))
                 {
                     GameState = GameState.Winner;
                     PlayAgain();
@@ -267,6 +254,23 @@ namespace Blackjack
             int gamblerHandVal = gambler.Hand.SumCardsValue();
 
             // If queue is not empty, and nobody is over 21 then return false
+
+            // If queue > 0, and dealer has blackjack, dealer automatically wins
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
+            {
+                OutputProvider.WriteLine("DEALER HAS BLACKJACK YOU LOSE");
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If Queue > 0, dealer has < 21, and player has 21, player wins
+            if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
+            {
+                OutputProvider.WriteLine("YOU WIN!");
+                GameState = GameState.Winner;
+                return true;
+            }
+
             if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal < 21)
             {
                 return false;
