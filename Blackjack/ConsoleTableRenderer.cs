@@ -42,7 +42,7 @@ namespace Blackjack
             //Clear previous table view
             Console.Clear();
             //Show dealer cards
-            Console.Write("Dealer: ");
+            Console.WriteLine("Dealer: ");
             ShowHand(table.Dealer);
             //loop through a player's hand and print their cards
             foreach(var player in table.Players)
@@ -106,12 +106,14 @@ namespace Blackjack
             if (dealer.Hand.Count == 2)
             {
                 var card = dealer.Hand.AllCards.FirstOrDefault();
-                Console.Write("( " + card.Face + " of " + card.Suit + ") ");
-                Console.Write("(HIDDEN CARD)");
+                Console.Write(ConfigurationManager.AppSettings["CardTop"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardTop"]);
+                Console.Write(ConfigurationManager.AppSettings["CardLeft"])
             }
             if (dealer.Hand.Count == 1)
             {
                 //Show placeholder for hidden dealer card
+                Console.Write(ConfigurationManager.AppSettings["CardTop"]);
                 Console.Write("(HIDDEN CARD)");
             }
             Console.WriteLine();
