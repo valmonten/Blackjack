@@ -191,6 +191,8 @@ namespace Blackjack
                 throw new ArgumentNullException("Dealer cannot be null!");
             }
 
+            
+
             Table.CompleteAllHands();
 
             // Calculate dealer's current hand
@@ -199,6 +201,7 @@ namespace Blackjack
             // If over 17, the dealer stays
             if (dealerHand > 17)
             {
+                PlayersInOrder.Dequeue();
                 // Set GameState to CheckingForGameOver and return
                 GameState = GameState.CheckingForGameOver;
                 if (DetermineWinner(Gamblers[0], Dealer))
@@ -264,24 +267,25 @@ namespace Blackjack
             }
 
             // If Queue > 0, dealer has < 21, and player has 21, player wins
-            if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
+            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
             {
+                Table.CompleteAllHands();
                 OutputProvider.WriteLine("YOU WIN!");
                 GameState = GameState.Winner;
                 return true;
             }
 
-            if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal < 21)
+            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal < 21)
             {
                 return false;
             }
-            
+
             // If both hands are the same and the queue is empty, game is a push
-            if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
+            else if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
             {
                 OutputProvider.WriteLine("PUSH!");
             }
-            
+
             // Otherwise, higher value wins
             else if (dealerHandVal > gamblerHandVal && PlayersInOrder.Count < 1)
             {
@@ -291,6 +295,11 @@ namespace Blackjack
             else if (gamblerHandVal > dealerHandVal && PlayersInOrder.Count < 1)
             {
                 OutputProvider.WriteLine("YOU WIN!");
+            }
+
+            else if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
+            {
+                OutputProvider.WriteLine("DEALER BUSTED! YOU WIN!");
             }
 
             GameState = GameState.Winner;
