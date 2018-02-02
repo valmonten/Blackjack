@@ -73,8 +73,20 @@ namespace Blackjack
             // Ask user for number of gamblers
             // Instantiate player(s), ask for name(s), and add to list of gamblers.
             GameState = GameState.WaitingToStart;
-            OutputProvider.WriteLine("Please enter your name, gambler.");
-            string gamblerName = InputProvider.Read();
+            string gamblerName = null;
+            bool isNameValid = false;
+            while(!isNameValid)
+            {
+                if(gamblerName == null || gamblerName == "")
+                {
+                    OutputProvider.WriteLine("Please enter your name, gambler.");
+                    gamblerName = InputProvider.Read();
+                }
+                else
+                {
+                    isNameValid = true;
+                }
+            }
             Gambler gambler = new Gambler(gamblerName);
             Gamblers = new List<IGambler> { gambler };
 
@@ -158,7 +170,9 @@ namespace Blackjack
                 }
                 else if (gambler.Hand.SumCardsValue() > 21)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     OutputProvider.WriteLine("BUSTED! YOU LOSE!");
+                    Console.ResetColor();
                     GameState = GameState.Winner;
                     PlayAgain();
                     return;
@@ -177,7 +191,9 @@ namespace Blackjack
             // If any other button is pushed, display error message and try again.
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 OutputProvider.WriteLine("Invalid button selected!");
+                Console.ResetColor();
                 OutputProvider.WriteLine("Press any key to try again");
                 InputProvider.Read();
                 GamblerPerformsSingleTurn(gambler);
@@ -261,7 +277,9 @@ namespace Blackjack
             // If queue > 0, and dealer has blackjack, dealer automatically wins
             if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 OutputProvider.WriteLine("DEALER HAS BLACKJACK YOU LOSE");
+                Console.ResetColor();
                 GameState = GameState.Winner;
                 return true;
             }
@@ -270,7 +288,9 @@ namespace Blackjack
             else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
             {
                 Table.CompleteAllHands();
+                Console.ForegroundColor = ConsoleColor.Green;
                 OutputProvider.WriteLine("YOU WIN!");
+                Console.ResetColor();
                 GameState = GameState.Winner;
                 return true;
             }
@@ -283,23 +303,31 @@ namespace Blackjack
             // If both hands are the same and the queue is empty, game is a push
             else if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 OutputProvider.WriteLine("PUSH!");
+                Console.ResetColor();
             }
 
             // Otherwise, higher value wins
             else if (dealerHandVal > gamblerHandVal && PlayersInOrder.Count < 1)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 OutputProvider.WriteLine("YOU LOSE!");
+                Console.ResetColor();
             }
 
             else if (gamblerHandVal > dealerHandVal && PlayersInOrder.Count < 1)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 OutputProvider.WriteLine("YOU WIN!");
+                Console.ResetColor();
             }
 
             else if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 OutputProvider.WriteLine("DEALER BUSTED! YOU WIN!");
+                Console.ResetColor();
             }
 
             GameState = GameState.Winner;
