@@ -178,6 +178,8 @@ namespace Blackjack
                 throw new ArgumentNullException("Dealer cannot be null!");
             }
 
+            Table.CompleteAllHands();
+
             // Calculate dealer's current hand
             int dealerHand = Dealer.Hand.SumCardsValue();
 
