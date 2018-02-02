@@ -62,7 +62,7 @@ namespace Blackjack
             if (table == null)
                 throw new ArgumentNullException("Table cannot be null");
             //Render hidden dealer info
-            Console.Write("Dealer: ");
+            Console.WriteLine("Dealer: ");
             HideHand(table.Dealer);
             //Render cards for each player
             foreach(var player in table.Players)
@@ -108,7 +108,34 @@ namespace Blackjack
                 var card = dealer.Hand.AllCards.FirstOrDefault();
                 Console.Write(ConfigurationManager.AppSettings["CardTop"]);
                 Console.WriteLine(ConfigurationManager.AppSettings["CardTop"]);
-                Console.Write(ConfigurationManager.AppSettings["CardLeft"])
+                Console.Write(ConfigurationManager.AppSettings["CardLeft"]);
+                Console.Write(card.Face);
+                for (int i = 0; i < 5 - card.Face.ToString().ToList().Count; i++)
+                    Console.Write(" ");
+                Console.Write(ConfigurationManager.AppSettings["CardRight"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubTop"]);
+                if (card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondTop"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartTop"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeTop"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubBottom"]);
+                if (card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondBottom"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartBottom"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeBottom"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                Console.Write(ConfigurationManager.AppSettings["CardBase"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardBase"]);
+                Console.Write(ConfigurationManager.AppSettings["CardBottom"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardBottom"]);
             }
             if (dealer.Hand.Count == 1)
             {
