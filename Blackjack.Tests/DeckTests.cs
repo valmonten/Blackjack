@@ -48,6 +48,21 @@ namespace Blackjack.Tests
         }
 
         [TestMethod]
+        public void TestDeckBuildMultipleDecks()
+        {
+            // arrange
+            Deck newDeck = new Deck();
+            int expected1 = 156;
+
+            // act
+            newDeck.Build(3);
+            var actual1 = newDeck.RemainingCardsInDeck();
+
+            // assert
+            Assert.AreEqual(expected1, actual1);
+        }
+
+        [TestMethod]
         public void TestDeckShuffle()
         {
             // arrange

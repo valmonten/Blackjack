@@ -14,6 +14,12 @@ namespace Blackjack.Interfaces
         void Build();
 
         /// <summary>
+        /// Builds new multi-deck of cards depending on the numberOfDecks specified.
+        /// </summary>
+        /// <param name="numberOfDecks"></param>
+        void Build(int numberOfDecks);
+
+        /// <summary>
         /// Shuffles the deck.
         /// </summary>
         void Shuffle(int numTimes);
