@@ -31,7 +31,7 @@ namespace Blackjack.Interfaces
         void StartGame();
 
         void GamblerPerformsSingleTurn(IGambler gambler);
-        void DealerPerformsSingleTurn();
+        void DealerPerformsSingleTurn(IDealer dealer);
         void SwitchTurns(IPlayer player);
         void PlayAgain();
         void ResetScreen();
