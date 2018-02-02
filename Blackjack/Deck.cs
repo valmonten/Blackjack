@@ -44,6 +44,37 @@ namespace Blackjack
             }
         }
 
+        /// <summary>
+        /// Builds new multi-deck of cards depending on the numberOfDecks specified.
+        /// </summary>
+        public void Build(int numberOfDecks)
+        {
+            // Loops through and builds the number of decks specified.
+            while (numberOfDecks > 0)
+            {
+                // List of card suits
+                var suits = Enum.GetValues(typeof(CardSuit)).Cast<CardSuit>().ToList();
+
+                // List of card faces
+                var cardFaces = Enum.GetValues(typeof(CardFace)).Cast<CardFace>().ToList();
+
+                // Array of default card values that correspond with Enum of CardFace
+                int[] faceValues = new int[] { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+
+                // Creates deck of cards, which will each have a suit, face, and value.
+                for (var i = 0; i < suits.Count; i++)
+                {
+                    for (var j = 0; j < cardFaces.Count; j++)
+                    {
+                        cards.Add(new Card(suits[i], cardFaces[j], faceValues[j]));
+                    }
+                }
+
+                // Decrements the number of decks left to build.
+                numberOfDecks--;
+            }
+        }
+
         // Draw card method
         public ICard DrawCard()
         {
@@ -62,6 +93,9 @@ namespace Blackjack
             return cards.Count;
         }
 
+        /// <summary>
+        /// Clears all the cards in the deck.
+        /// </summary>
         public void Reset()
         {
             cards.RemoveRange(0, cards.Count);
@@ -150,6 +184,8 @@ namespace Blackjack
                         }
                     }
                 }
+
+                // Decrements the number of times left to shuffle deck.
                 numTimes--;
             }
         }
