@@ -40,11 +40,11 @@ namespace Blackjack
             if (table == null)
                 throw new ArgumentNullException("Table cannot be null");
             //Clear previous table view
-            Console.Clear();
+            //Console.Clear();
             //Show dealer cards
             ShowHand(table.Dealer);
             //loop through a player's hand and print their cards
-            foreach(var player in table.Players)
+            foreach (var player in table.Players)
             {
                 ShowHand(player);
             }
@@ -60,10 +60,11 @@ namespace Blackjack
             if (table == null)
                 throw new ArgumentNullException("Table cannot be null");
             //Render hidden dealer info
-            Console.WriteLine("Dealer: ");
+            Console.WriteLine("DEALER: ");
             HideHand(table.Dealer);
+            Console.WriteLine();
             //Render cards for each player
-            foreach(var player in table.Players)
+            foreach (var player in table.Players)
             {
                 ShowHand(player);
             }
@@ -85,7 +86,7 @@ namespace Blackjack
             //{
             //    Console.Write(string.Format("({0} of {1}) ", card.Face, card.Suit));
             //}
-            //Console.WriteLine();
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace Blackjack
                 Console.Write(ConfigurationManager.AppSettings["CardTop"]);
                 Console.Write("(HIDDEN CARD)");
             }
-            Console.WriteLine();
+            //Console.WriteLine();
         }
         public void RevealHand(IHand hand)
         {

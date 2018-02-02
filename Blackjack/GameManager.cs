@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Blackjack.Interfaces;
+using System.Threading;
 
 namespace Blackjack
 {
@@ -79,8 +80,8 @@ namespace Blackjack
             {
                 if(gamblerName == null || gamblerName == "")
                 {
-                    OutputProvider.WriteLine("Please enter your name, gambler.");
-                    gamblerName = InputProvider.Read();
+                    OutputProvider.WriteLine("Gambler, please enter your name.");
+                    gamblerName = InputProvider.Read().ToUpper();
                 }
                 else
                 {
@@ -121,7 +122,7 @@ namespace Blackjack
 
             // Initiate 
             GameState = GameState.Started;
-            if (DetermineWinner(gambler, Dealer) == true)
+            if (DetermineWinner(gambler, Dealer))
             {
                 PlayAgain();
                 return;
@@ -130,7 +131,6 @@ namespace Blackjack
             {
                 // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
-
             }         
         }
 
@@ -143,11 +143,11 @@ namespace Blackjack
         {
             if (gambler == null)
             {
-                throw new ArgumentNullException("Gambler cannot be null");
+                throw new ArgumentNullException("Gambler cannot be null.");
             }
 
             // Prompt for action
-            OutputProvider.WriteLine("Please select [H] to hit or [S] to stay");
+            OutputProvider.WriteLine("Please select [H] to hit or [S] to stay.");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
 
@@ -165,8 +165,10 @@ namespace Blackjack
                 {
                     Table.CompleteAllHands();
                     ResetScreen();
-                    OutputProvider.WriteLine("YOU HAVE 21! Let's see what the dealer does");
+                    OutputProvider.WriteLine("YOU HAVE BLACKJACK! Let's see what the dealer does...");
+                    OutputProvider.WriteLine();
                     PlayersInOrder.Dequeue();
+                    Thread.Sleep(3000);
                     SwitchTurns(Dealer);
                     return;
                 }
@@ -175,7 +177,8 @@ namespace Blackjack
                     Table.CompleteAllHands();
                     ResetScreen();
                     Console.ForegroundColor = ConsoleColor.Red;
-                    OutputProvider.WriteLine("BUSTED! YOU LOSE!");
+                    OutputProvider.WriteLine("YOU BUSTED! YOU LOSE!");
+                    OutputProvider.WriteLine();
                     Console.ResetColor();
                     GameState = GameState.Winner;
                     PlayAgain();
@@ -190,6 +193,7 @@ namespace Blackjack
             else if (choice == "S" || choice == "s")
             {
                 PlayersInOrder.Dequeue();
+                ResetScreen();
                 SwitchTurns(Dealer);
             }
             // If any other button is pushed, display error message and try again.
@@ -210,9 +214,7 @@ namespace Blackjack
             {
                 throw new ArgumentNullException("Dealer cannot be null!");
             }
-
-            
-
+         
             Table.CompleteAllHands();
 
             // Calculate dealer's current hand
@@ -276,66 +278,118 @@ namespace Blackjack
             int dealerHandVal = Dealer.Hand.SumCardsValue();
             int gamblerHandVal = gambler.Hand.SumCardsValue();
 
-            // If queue is not empty, and nobody is over 21 then return false
-
-            // If queue > 0, and dealer has blackjack, dealer automatically wins
-            if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                OutputProvider.WriteLine("DEALER HAS BLACKJACK YOU LOSE");
-                Console.ResetColor();
-                GameState = GameState.Winner;
-                return true;
-            }
-
-            // If Queue > 0, dealer has < 21, and player has 21, player wins
-            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal == 21)
+            // If queue > 0, and both dealer and gambler have 21, then it's a push
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21 && gamblerHandVal == 21)
             {
                 Table.CompleteAllHands();
-                Console.ForegroundColor = ConsoleColor.Green;
-                OutputProvider.WriteLine("YOU WIN!");
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                OutputProvider.WriteLine(gambler.Name + " AND THE DEALER BOTH STARTED WITH BLACKJACK! IT'S A PUSH!");
+                OutputProvider.WriteLine();
                 Console.ResetColor();
                 GameState = GameState.Winner;
                 return true;
             }
 
-            else if (PlayersInOrder.Count > 0 && dealerHandVal < 21 && gamblerHandVal < 21)
+            // If queue > 0, and only dealer has blackjack, then dealer wins
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
             {
-                return false;
-            }
-
-            // If both hands are the same and the queue is empty, game is a push
-            else if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                OutputProvider.WriteLine("PUSH!");
-                Console.ResetColor();
-            }
-
-            // Otherwise, higher value wins
-            else if (dealerHandVal > gamblerHandVal && PlayersInOrder.Count < 1)
-            {
+                Table.CompleteAllHands();
+                ResetScreen();
                 Console.ForegroundColor = ConsoleColor.Red;
-                OutputProvider.WriteLine("YOU LOSE!");
+                OutputProvider.WriteLine("DEALER STARTS WITH BLACKJACK. YOU LOSE!");
+                OutputProvider.WriteLine();
                 Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
             }
 
-            else if (gamblerHandVal > dealerHandVal && PlayersInOrder.Count < 1)
+            // If queue > 0, and only gambler has blackjack, then gambler wins
+            if (PlayersInOrder.Count > 0 && gamblerHandVal == 21)
             {
+                Table.CompleteAllHands();
+                ResetScreen();
                 Console.ForegroundColor = ConsoleColor.Green;
-                OutputProvider.WriteLine("YOU WIN!");
+                OutputProvider.WriteLine("YOU START WITH BLACKJACK. YOU WIN!");
+                OutputProvider.WriteLine();
                 Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
             }
 
-            else if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
+            // If queue == 0, and the dealer goes over 21, then dealer busts
+            if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
             {
+                ResetScreen();
                 Console.ForegroundColor = ConsoleColor.Green;
                 OutputProvider.WriteLine("DEALER BUSTED! YOU WIN!");
+                OutputProvider.WriteLine();
                 Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
             }
 
-            GameState = GameState.Winner;
-            return true;
+            // If queue == 0, and both hands are the same, then it's a push
+            if (PlayersInOrder.Count < 1 && dealerHandVal == gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                OutputProvider.WriteLine(gambler.Name + " AND THE DEALER HAVE THE SAME HAND VALUE. IT'S A PUSH!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and dealer has 21, then dealer wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal == 21)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("DEALER HAS BLACKJACK. YOU LOSE!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and gambler has a higher hand, then gambler wins
+            if (PlayersInOrder.Count < 1 && gamblerHandVal == 21)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("YOU HAVE BLACKJACK. YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and dealer has a higher hand, then dealer wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal > gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("DEALER HAS A HIGHER HAND VALUE. YOU LOSE!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and gambler has a higher hand, then gambler wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal < gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("YOU HAVE A HIGHER HAND VALUE. YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
