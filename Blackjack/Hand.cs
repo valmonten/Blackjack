@@ -39,15 +39,10 @@ namespace Blackjack
         /// <returns>int sum</returns>
         public int SumCardsValue()
         {
-            foreach (var card in AllCards.Where(c => c.Face == CardFace.Ace))
-            {
-                card.Value = 1;
-            }
-
             int sum = AllCards.Sum(c => c.Value);
-            if (AllCards.Any(c => c.Face == CardFace.Ace) && sum <= 21)
+            if (AllCards.Any(c => c.Face == CardFace.Ace) && sum > 21)
             {
-                AllCards.FirstOrDefault(c => c.Face == CardFace.Ace).Value = 11;
+                AllCards.FirstOrDefault(c => c.Face == CardFace.Ace).Value = 1;
                 sum = AllCards.Sum(c => c.Value);
             }
             return sum;
