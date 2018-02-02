@@ -151,6 +151,8 @@ namespace Blackjack
                 GameState = GameState.CheckingForGameOver;
                 if (gambler.Hand.SumCardsValue() == 21)
                 {
+                    Table.CompleteAllHands();
+                    ResetScreen();
                     OutputProvider.WriteLine("YOU HAVE 21! Let's see what the dealer does");
                     PlayersInOrder.Dequeue();
                     SwitchTurns(Dealer);
@@ -158,6 +160,8 @@ namespace Blackjack
                 }
                 else if (gambler.Hand.SumCardsValue() > 21)
                 {
+                    Table.CompleteAllHands();
+                    ResetScreen();
                     OutputProvider.WriteLine("BUSTED! YOU LOSE!");
                     GameState = GameState.Winner;
                     PlayAgain();
@@ -283,6 +287,7 @@ namespace Blackjack
             // If both hands are the same and the queue is empty, game is a push
             else if (dealerHandVal == gamblerHandVal && PlayersInOrder.Count < 1)
             {
+
                 OutputProvider.WriteLine("PUSH!");
             }
 
