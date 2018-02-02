@@ -46,13 +46,12 @@ namespace Blackjack.Tests
 
             var cardAce = new MockCard();
             cardAce.Face = CardFace.Ace;
-            cardAce.Value = (int)CardFace.Ace + 1;
-            Assert.AreEqual(1, cardAce.Value);
-
+            cardAce.Value = 11;
+            
             var card6 = new MockCard();
             card6.Face = CardFace.Six;
             card6.Value = 6;
-            //Assert.AreEqual(8, card8.Value);
+
 
             var card7 = new MockCard();
             card7.Face = CardFace.Seven;
@@ -66,7 +65,7 @@ namespace Blackjack.Tests
             var cardKing = new MockCard();
             cardKing.Face = CardFace.King;
             cardKing.Value = 10;
-            //Assert.AreEqual(13, cardKing.Value);
+
 
             int expectedSumWhenAceIs_11 = 11 + cardKing.Value;
             int expectedSumWhenAceIs_1 = 1 + card6.Value + card7.Value + card8.Value + cardKing.Value;
@@ -89,6 +88,12 @@ namespace Blackjack.Tests
             int AceValue1 = hand.AllCards
                 .FirstOrDefault(c => c.Face == CardFace.Ace)
                 .Value;
+
+            //TODO:
+            //int sum = hand.SumCardsValue();
+            //int ace = hand.AllCards.FirstOrDefault(c => c.Face == CardFace.Ace).Value;
+            //Assert.AreEqual(1, ace);
+            //Assert.AreEqual(15, sum);
 
             // assert
             Assert.AreEqual(expectedSumWhenAceIs_11, actualSumWhenAceIs_11);
