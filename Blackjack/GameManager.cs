@@ -163,6 +163,8 @@ namespace Blackjack
                 GameState = GameState.CheckingForGameOver;
                 if (gambler.Hand.SumCardsValue() == 21)
                 {
+                    Table.CompleteAllHands();
+                    ResetScreen();
                     OutputProvider.WriteLine("YOU HAVE 21! Let's see what the dealer does");
                     PlayersInOrder.Dequeue();
                     SwitchTurns(Dealer);
@@ -170,6 +172,8 @@ namespace Blackjack
                 }
                 else if (gambler.Hand.SumCardsValue() > 21)
                 {
+                    Table.CompleteAllHands();
+                    ResetScreen();
                     Console.ForegroundColor = ConsoleColor.Red;
                     OutputProvider.WriteLine("BUSTED! YOU LOSE!");
                     Console.ResetColor();

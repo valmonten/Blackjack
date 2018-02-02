@@ -42,12 +42,10 @@ namespace Blackjack
             //Clear previous table view
             Console.Clear();
             //Show dealer cards
-            Console.WriteLine("Dealer: ");
             ShowHand(table.Dealer);
             //loop through a player's hand and print their cards
             foreach(var player in table.Players)
             {
-                Console.WriteLine(player.Name + ":");
                 ShowHand(player);
             }
         }
