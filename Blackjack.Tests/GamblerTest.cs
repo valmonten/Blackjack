@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Blackjack.Interfaces;
 using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System.Collections.Generic;
 namespace Blackjack.Tests
 {
 
@@ -65,6 +66,79 @@ namespace Blackjack.Tests
 
             // assert
             Assert.AreEqual(3, handCount);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSplitMeWhenHandWasAlreadySplit()
+        {
+            //Arrange
+            
+            var g = new Gambler(true, new Hand(), "Nathan");
+
+            //Act
+            g.SplitMe();
+            
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSplitMeWhenFacesDoNotMatch()
+        {
+            //Arrange
+            var handy = new Mock<IHand>(MockBehavior.Strict);
+            var c1 = new Mock<ICard>(MockBehavior.Strict);
+            c1.Setup(x => x.Face).Returns(CardFace.King);
+            handy.Setup(x => x.AllCards[0]).Returns(c1.Object);
+            handy.Setup(x => x.AllCards[1].Face).Returns(CardFace.Queen);
+
+            var face = handy.Object.AllCards[0].Face;
+            var face2 = handy.Object.AllCards[1].Face;
+            var g = new Gambler(false, handy.Object, "Nathan");
+
+            //Act
+            g.SplitMe();
+
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSplitMeWhenMoreThanTwoCards()
+        {
+            //Arrange
+            var handy = new Mock<IHand>(MockBehavior.Strict);
+            handy.Setup(x => x.Count).Returns(3);
+
+            var g = new Gambler(false, handy.Object, "Nathan");
+
+            //Act
+            g.SplitMe();
+
+        }
+        [TestMethod]
+        public void TestSplitMeWithValidInput()
+        {
+            //Arrange
+            var handy = new Mock<IHand>(MockBehavior.Strict);
+            var handy2 = new Mock<IHand>(MockBehavior.Strict);
+            var c1 = new Mock<ICard>(MockBehavior.Strict);
+            var c2 = new Mock<ICard>(MockBehavior.Strict);
+            c1.Setup(x => x.Face).Returns(CardFace.King);
+            c2.Setup(x => x.Face).Returns(CardFace.King);
+
+            handy.Setup(x => x.AllCards).Returns(new List<ICard>() {c1.Object, c2.Object });
+            handy2.Setup(x => x.AllCards).Returns(new List<ICard>() {c1.Object});
+            
+
+            handy.Setup(x => x.Count).Returns(2);
+
+            var g = new Gambler(false, handy.Object, "Nathan");
+            
+
+            //Act
+            g.SplitMe();
+
+            //Assert
+            Assert.AreEqual(true, g.isHandSplit);
+            CollectionAssert.AreEqual(handy2.Object.AllCards.ToList(), handy.Object.AllCards.ToList());
+            Assert.AreEqual(1, g.SplitHand.Count);
         }
     }
 }
