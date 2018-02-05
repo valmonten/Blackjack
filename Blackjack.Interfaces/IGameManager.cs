@@ -23,6 +23,7 @@ namespace Blackjack.Interfaces
         ITable Table { get; }
         List<IGambler> Gamblers { get;  }
         IDealer Dealer { get;  }
+        Queue<IPlayer> PlayersInOrder { get;  }
         IInputProvider InputProvider { get; }
         IOutputProvider OutputProvider { get; }
         ITableRenderer TableRenderer { get;  }
@@ -30,7 +31,7 @@ namespace Blackjack.Interfaces
         void StartGame();
 
         void GamblerPerformsSingleTurn(IGambler gambler);
-        void DealerPerformsSingleTurn();
+        void DealerPerformsSingleTurn(IDealer dealer);
         void SwitchTurns(IPlayer player);
         void PlayAgain();
         void ResetScreen();

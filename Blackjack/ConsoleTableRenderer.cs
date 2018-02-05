@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Blackjack.Interfaces;
+using System.Configuration;
 
 namespace Blackjack
 {
@@ -39,14 +40,12 @@ namespace Blackjack
             if (table == null)
                 throw new ArgumentNullException("Table cannot be null");
             //Clear previous table view
-            Console.Clear();
+            //Console.Clear();
             //Show dealer cards
-            Console.Write("Dealer: ");
             ShowHand(table.Dealer);
             //loop through a player's hand and print their cards
-            foreach(var player in table.Players)
+            foreach (var player in table.Players)
             {
-                Console.Write($"{0}: ", player.Name);
                 ShowHand(player);
             }
         }
@@ -61,10 +60,11 @@ namespace Blackjack
             if (table == null)
                 throw new ArgumentNullException("Table cannot be null");
             //Render hidden dealer info
-            Console.Write("Dealer: ");
+            Console.WriteLine("DEALER: ");
             HideHand(table.Dealer);
+            Console.WriteLine();
             //Render cards for each player
-            foreach(var player in table.Players)
+            foreach (var player in table.Players)
             {
                 ShowHand(player);
             }
@@ -80,11 +80,12 @@ namespace Blackjack
             if (player == null)
                 throw new ArgumentNullException("Cannot show cards of null");
             //display each card
-            Console.Write(player.Name + ": ");
-            foreach(var card in player.Hand.AllCards)
-            {
-                Console.Write(string.Format("({0} of {1}) ", card.Face, card.Suit));
-            }
+            Console.WriteLine(player.Name + ": ");
+            RevealHand(player.Hand);
+            //foreach(var card in player.Hand.AllCards)
+            //{
+            //    Console.Write(string.Format("({0} of {1}) ", card.Face, card.Suit));
+            //}
             Console.WriteLine();
         }
 
@@ -104,10 +105,89 @@ namespace Blackjack
             if (dealer.Hand.Count == 2)
             {
                 var card = dealer.Hand.AllCards.FirstOrDefault();
-                Console.Write("( " + card.Face + " of " + card.Suit + ") ");
+                Console.Write(ConfigurationManager.AppSettings["CardTop"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardTop"]);
+                Console.Write(ConfigurationManager.AppSettings["CardLeft"]);
+                Console.Write(card.Face);
+                for (int i = 0; i < 5 - card.Face.ToString().ToList().Count; i++)
+                    Console.Write(" ");
+                Console.Write(ConfigurationManager.AppSettings["CardRight"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubTop"]);
+                if (card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondTop"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartTop"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeTop"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubBottom"]);
+                if (card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondBottom"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartBottom"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeBottom"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["HiddenCard"]);
+                Console.Write(ConfigurationManager.AppSettings["CardBase"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardBase"]);
+                Console.Write(ConfigurationManager.AppSettings["CardBottom"]);
+                Console.WriteLine(ConfigurationManager.AppSettings["CardBottom"]);
             }
-            //Show placeholder for hidden dealer card
-            Console.Write("(HIDDEN CARD)");
+            if (dealer.Hand.Count == 1)
+            {
+                //Show placeholder for hidden dealer card
+                Console.Write(ConfigurationManager.AppSettings["CardTop"]);
+                Console.Write("(HIDDEN CARD)");
+            }
+            //Console.WriteLine();
+        }
+        public void RevealHand(IHand hand)
+        {
+            for (int i = 0; i < hand.Count; i++)
+                Console.Write(ConfigurationManager.AppSettings["CardTop"]);
+            Console.WriteLine();
+            foreach (ICard card in hand.AllCards)
+            {
+
+                Console.Write(ConfigurationManager.AppSettings["CardLeft"]);
+                Console.Write(card.Face);
+                for (int i = 0; i < 5 - card.Face.ToString().ToList().Count; i++)
+                    Console.Write(" ");
+                Console.Write(ConfigurationManager.AppSettings["CardRight"]);
+            }
+            Console.WriteLine();
+            foreach (ICard card in hand.AllCards)
+            {
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubTop"]);
+                if(card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondTop"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartTop"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeTop"]);
+            }
+            Console.WriteLine();
+            foreach (ICard card in hand.AllCards)
+            {
+                if (card.Suit == CardSuit.Club)
+                    Console.Write(ConfigurationManager.AppSettings["ClubBottom"]);
+                if (card.Suit == CardSuit.Diamond)
+                    Console.Write(ConfigurationManager.AppSettings["DiamondBottom"]);
+                if (card.Suit == CardSuit.Heart)
+                    Console.Write(ConfigurationManager.AppSettings["HeartBottom"]);
+                if (card.Suit == CardSuit.Spade)
+                    Console.Write(ConfigurationManager.AppSettings["SpadeBottom"]);
+            }
+            Console.WriteLine();
+            for (int i = 0; i < hand.Count; i++)
+                Console.Write(ConfigurationManager.AppSettings["CardBase"]);
+            Console.WriteLine();
+            for (int i = 0; i < hand.Count; i++)
+                Console.Write(ConfigurationManager.AppSettings["CardBottom"]);
             Console.WriteLine();
         }
     }

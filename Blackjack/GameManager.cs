@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Blackjack.Interfaces;
+using System.Threading;
 
 namespace Blackjack
 {
@@ -16,6 +17,7 @@ namespace Blackjack
         public List<IGambler> Gamblers { get; private set; }
 
         public IDealer Dealer { get; private set; }
+        public Queue<IPlayer> PlayersInOrder { get; private set; }
 
         public IInputProvider InputProvider { get; private set; }
         public IOutputProvider OutputProvider { get; private set; }
@@ -26,7 +28,7 @@ namespace Blackjack
         /// </summary>
         public GameManager() : this(new Dealer(new Deck(), "Dealer"), new ConsoleInputProvider(),
             new ConsoleOutputProvider(),
-            new ConsoleTableRenderer())
+            new ConsoleTableRenderer(), new Queue<IPlayer>(), new List<IGambler>())
         {
 
         }
@@ -40,12 +42,14 @@ namespace Blackjack
         /// <param name="outputProvider"></param>
         /// <param name="tableRenderer"></param>
         public GameManager(IDealer dealer, IInputProvider inputProvider, 
-            IOutputProvider outputProvider, ITableRenderer tableRenderer)
+            IOutputProvider outputProvider, ITableRenderer tableRenderer, Queue<IPlayer> playersInOrder, List<IGambler> gamblers)
         {
             Dealer = dealer;
             InputProvider = inputProvider;
             OutputProvider = outputProvider;
             TableRenderer = tableRenderer;
+            PlayersInOrder = playersInOrder;
+            Gamblers = gamblers;
         }
 
         /// <summary>
@@ -71,16 +75,35 @@ namespace Blackjack
             // Ask user for number of gamblers
             // Instantiate player(s), ask for name(s), and add to list of gamblers.
             GameState = GameState.WaitingToStart;
-            OutputProvider.WriteLine("Please enter your name, gambler.");
-            string gamblerName = InputProvider.Read();
+            string gamblerName = null;
+            bool isNameValid = false;
+            while(!isNameValid)
+            {
+                if(gamblerName == null || gamblerName == "")
+                {
+                    OutputProvider.WriteLine("Gambler, please enter your name.");
+                    gamblerName = InputProvider.Read().ToUpper();
+                }
+                else
+                {
+                    isNameValid = true;
+                }
+            }
             Gambler gambler = new Gambler(gamblerName);
             Gamblers = new List<IGambler> { gambler };
+
+            // Add players to queue, gambler first
+            PlayersInOrder.Enqueue(gambler);
+            PlayersInOrder.Enqueue(Dealer);
 
             // Instantiate the table
             Table = new Table(Dealer, Gamblers);
 
             // Build a deck for the dealer
             Dealer.Deck.Build();
+
+            // Shuffle the deck
+            Dealer.Deck.Shuffle(10);
 
             // Deal 2 cards each to gambler and dealer
             for (int i = 0; i < 4; i++)
@@ -100,28 +123,15 @@ namespace Blackjack
 
             // Initiate 
             GameState = GameState.Started;
-            if (DetermineWinner() == true)
+            if (DetermineWinner(gambler, Dealer))
             {
                 PlayAgain();
+                return;
             }
             else
             {
                 // Turns start and finish within this call stack
                 GamblerPerformsSingleTurn(gambler);
-                
-                // If a Winner was determined in previous call stack, exit out
-                if (GameState == GameState.Winner)
-                {
-                    return;
-                }
-
-                // Once all turns are done, determine winner
-                DetermineWinner();
-
-                // Ask gambler(s) if they want to play again
-                PlayAgain();
-
-                return;
             }         
         }
 
@@ -134,11 +144,11 @@ namespace Blackjack
         {
             if (gambler == null)
             {
-                throw new ArgumentNullException("Gambler cannot be null");
+                throw new ArgumentNullException("Gambler cannot be null.");
             }
 
             // Prompt for action
-            OutputProvider.WriteLine("Please select [H] to hit or [S] to stay");
+            OutputProvider.WriteLine("Please select [H] to hit or [S] to stay.");
             GameState = GameState.WaitingForUserInput;
             var choice = InputProvider.Read();
 
@@ -152,8 +162,25 @@ namespace Blackjack
                 ResetScreen();
                 // If Win condition met, call play again. If not, perform another turn
                 GameState = GameState.CheckingForGameOver;
-                if (DetermineWinner())
+                if (gambler.Hand.SumCardsValue() == 21)
                 {
+                    Table.CompleteAllHands();
+                    ResetScreen();
+                    OutputProvider.WriteLine("YOU HAVE BLACKJACK! Let's see what the dealer does...");
+                    OutputProvider.WriteLine();
+                    PlayersInOrder.Dequeue();
+                    Thread.Sleep(3000);
+                    SwitchTurns(Dealer);
+                    return;
+                }
+                else if (gambler.Hand.SumCardsValue() > 21)
+                {
+                    Table.CompleteAllHands();
+                    ResetScreen();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    OutputProvider.WriteLine("YOU BUSTED! YOU LOSE!");
+                    OutputProvider.WriteLine();
+                    Console.ResetColor();
                     GameState = GameState.Winner;
                     PlayAgain();
                     return;
@@ -163,23 +190,60 @@ namespace Blackjack
                     GamblerPerformsSingleTurn(gambler);
                 }
             }
-
-            // If player stays, switch turns
-            SwitchTurns(Dealer);
+            // If player selects stay, switch turns
+            else if (choice == "S" || choice == "s")
+            {
+                PlayersInOrder.Dequeue();
+                ResetScreen();
+                SwitchTurns(Dealer);
+            }
+            // If any other button is pushed, display error message and try again.
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("Invalid button selected!");
+                Console.ResetColor();
+                OutputProvider.WriteLine("Press any key to try again");
+                InputProvider.Read();
+                GamblerPerformsSingleTurn(gambler);
+            }
         }
 
-        public void DealerPerformsSingleTurn()
+        public void DealerPerformsSingleTurn(IDealer dealer)
         {
-            // Calculate dealer's current hand
+            if (dealer == null)
+            {
+                throw new ArgumentNullException("Dealer cannot be null!");
+            }
+         
+            Table.CompleteAllHands();
 
-            // If value of hand is below 17, dealer hits
+            // Calculate dealer's current hand
+            int dealerHand = Dealer.Hand.SumCardsValue();
 
             // If over 17, the dealer stays
+            if (dealerHand > 17)
+            {
+                PlayersInOrder.Dequeue();
+                // Set GameState to CheckingForGameOver and return
+                GameState = GameState.CheckingForGameOver;
+                if (DetermineWinner(Gamblers[0], Dealer))
+                {
+                    GameState = GameState.Winner;
+                    PlayAgain();
+                    return;
+                }
 
-            // Set GameState to CheckingForGameOver and return
-            GameState = GameState.CheckingForGameOver;
-            //return;
-            throw new NotImplementedException();
+                throw new ArgumentException("Winner could not be determined.");
+            }
+            // If value of hand is below 17, dealer hits
+            else
+            {
+                GameState = GameState.PerformingMove;
+                dealer.GetCard(Dealer);
+                ResetScreen();
+                DealerPerformsSingleTurn(Dealer);
+            }
         }
 
         /// <summary>
@@ -201,7 +265,7 @@ namespace Blackjack
             }
 
             if (player == Dealer)
-                DealerPerformsSingleTurn();
+                DealerPerformsSingleTurn(player as Dealer);
             else
                 GamblerPerformsSingleTurn(player as Gambler);
         }
@@ -209,17 +273,122 @@ namespace Blackjack
         /// <summary>
         /// Helper function that gets the amount of points per hand, and determines whether there's a winner
         /// </summary>
-        public bool DetermineWinner()
+        public bool DetermineWinner(IGambler gambler, IDealer dealer)
         {
             // Calculate hand of gambler and dealer
+            int dealerHandVal = Dealer.Hand.SumCardsValue();
+            int gamblerHandVal = gambler.Hand.SumCardsValue();
 
-            // If both hands are the same, then tie
+            // If queue > 0, and both dealer and gambler have 21, then it's a push
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21 && gamblerHandVal == 21)
+            {
+                Table.CompleteAllHands();
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                OutputProvider.WriteLine(gambler.Name + " AND THE DEALER BOTH STARTED WITH BLACKJACK! IT'S A PUSH!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
 
-            // If a hand is 21, then that player wins
+            // If queue > 0, and only dealer has blackjack, then dealer wins
+            if (PlayersInOrder.Count > 0 && dealerHandVal == 21)
+            {
+                Table.CompleteAllHands();
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("DEALER STARTS WITH BLACKJACK. YOU LOSE!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
 
-            // If a hand is over 21, then that player loses
+            // If queue > 0, and only gambler has blackjack, then gambler wins
+            if (PlayersInOrder.Count > 0 && gamblerHandVal == 21)
+            {
+                Table.CompleteAllHands();
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("YOU START WITH BLACKJACK. YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
 
-            // Otherwise, higher value wins
+            // If queue == 0, and the dealer goes over 21, then dealer busts
+            if (PlayersInOrder.Count < 1 && dealerHandVal > 21)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("DEALER BUSTED! YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and both hands are the same, then it's a push
+            if (PlayersInOrder.Count < 1 && dealerHandVal == gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                OutputProvider.WriteLine(gambler.Name + " AND THE DEALER HAVE THE SAME HAND VALUE. IT'S A PUSH!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and dealer has 21, then dealer wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal == 21)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("DEALER HAS BLACKJACK. YOU LOSE!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and gambler has a higher hand, then gambler wins
+            if (PlayersInOrder.Count < 1 && gamblerHandVal == 21)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("YOU HAVE BLACKJACK. YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and dealer has a higher hand, then dealer wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal > gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Red;
+                OutputProvider.WriteLine("DEALER HAS A HIGHER HAND VALUE. YOU LOSE!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
+
+            // If queue == 0, and gambler has a higher hand, then gambler wins
+            if (PlayersInOrder.Count < 1 && dealerHandVal < gamblerHandVal)
+            {
+                ResetScreen();
+                Console.ForegroundColor = ConsoleColor.Green;
+                OutputProvider.WriteLine("YOU HAVE A HIGHER HAND VALUE. YOU WIN!");
+                OutputProvider.WriteLine();
+                Console.ResetColor();
+                GameState = GameState.Winner;
+                return true;
+            }
 
             return false;
         }
@@ -249,6 +418,7 @@ namespace Blackjack
                     isUserInputIncorrect = false;
                     OutputProvider.WriteLine("Okay, goodbye! (Press any key to exit)");
                     InputProvider.Read();
+                    break;
                 }
                 // If user inputs another response, ask the user for a correct input.
                 else
